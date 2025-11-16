@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './styles/variables.css';
+import './styles/global.css';
+import './styles/components.css';
 import './index.css';
 import App from './App';
 
@@ -9,5 +12,3 @@ root.render(
     <App />
   </React.StrictMode>
 );
-
-
