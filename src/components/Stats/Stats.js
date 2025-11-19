@@ -1,5 +1,8 @@
 import { useForms } from '../../context/FormsContext';
 import { QUESTION_TYPES } from '../../types';
+import StatsSummary from './StatsSummary';
+import StatsChart from './StatsChart';
+import StatsResponses from './StatsResponses';
 import './Stats.css';
 
 const Stats = () => {
@@ -17,8 +20,8 @@ const Stats = () => {
 
     const answers = responses.map(r => r.answers[question.id]).filter(Boolean);
 
-    if (question.type === QUESTION_TYPES.SINGLE_CHOICE || 
-        question.type === QUESTION_TYPES.MULTIPLE_CHOICE) {
+    if (question.type === QUESTION_TYPES.SINGLE_CHOICE ||
+      question.type === QUESTION_TYPES.MULTIPLE_CHOICE) {
       const counts = {};
       answers.forEach(answer => {
         const values = Array.isArray(answer) ? answer : [answer];
@@ -56,121 +59,18 @@ const Stats = () => {
         </div>
       </div>
 
-      <div className="stats-overview">
-        <div className="stat-card">
-          <div className="stat-label">Переглядів</div>
-          <div className="stat-value">{stats.totalViews || 0}</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Відповідей</div>
-          <div className="stat-value">{stats.totalResponses || 0}</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Завершення</div>
-          <div className="stat-value">{stats.completionRate || 0}%</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-label">Середній час</div>
-          <div className="stat-value">{stats.averageTime || 0}с</div>
-        </div>
-      </div>
+      <StatsSummary stats={stats} />
 
-      <div className="questions-stats">
-        <h2>Статистика по питаннях</h2>
-        {currentForm.questions.map((question, index) => {
-          const questionStats = getQuestionStats(question);
-          return (
-            <div key={question.id} className="question-stats-card">
-              <div className="question-stats-header">
-                <span className="question-number">{index + 1}</span>
-                <h3>{question.title}</h3>
-              </div>
+      <StatsChart
+        currentForm={currentForm}
+        getQuestionStats={getQuestionStats}
+        responses={responses}
+      />
 
-              {!questionStats ? (
-                <p className="no-data">Поки що немає відповідей</p>
-              ) : (
-                <div className="question-stats-content">
-                  {question.type === QUESTION_TYPES.SINGLE_CHOICE || 
-                   question.type === QUESTION_TYPES.MULTIPLE_CHOICE ? (
-                    <div className="options-stats">
-                      {question.options?.map((option) => {
-                        const count = questionStats[option.text] || 0;
-                        const percentage = responses.length > 0 
-                          ? Math.round((count / responses.length) * 100) 
-                          : 0;
-                        return (
-                          <div key={option.id} className="option-stat">
-                            <div className="option-stat-header">
-                              <span>{option.text}</span>
-                              <span className="option-stat-count">
-                                {count} ({percentage}%)
-                              </span>
-                            </div>
-                            <div className="option-stat-bar">
-                              <div 
-                                className="option-stat-fill"
-                                style={{ width: `${percentage}%` }}
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : question.type === QUESTION_TYPES.SCALE ? (
-                    <div className="scale-stats">
-                      <div className="scale-stat-item">
-                        <span>Середнє:</span>
-                        <strong>{questionStats.average}</strong>
-                      </div>
-                      <div className="scale-stat-item">
-                        <span>Мін:</span>
-                        <strong>{questionStats.min}</strong>
-                      </div>
-                      <div className="scale-stat-item">
-                        <span>Макс:</span>
-                        <strong>{questionStats.max}</strong>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-stats">
-                      <p>Відповідей: {questionStats.total}</p>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {responses.length > 0 && (
-        <div className="responses-list">
-          <h2>Останні відповіді</h2>
-          <div className="responses-grid">
-            {responses.slice(-10).reverse().map((response) => (
-              <div key={response.id} className="response-card">
-                <div className="response-date">
-                  {new Date(response.submittedAt).toLocaleString('uk-UA')}
-                </div>
-                <div className="response-answers">
-                  {Object.entries(response.answers).map(([questionId, answer]) => {
-                    const question = currentForm.questions.find(q => q.id === questionId);
-                    if (!question) return null;
-                    return (
-                      <div key={questionId} className="response-answer">
-                        <strong>{question.title}:</strong>
-                        <span>
-                          {Array.isArray(answer) ? answer.join(', ') : String(answer)}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      <StatsResponses
+        responses={responses}
+        currentForm={currentForm}
+      />
     </div>
   );
 };

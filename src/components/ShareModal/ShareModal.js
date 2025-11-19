@@ -1,14 +1,61 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useForms } from '../../context/FormsContext';
+import ShareLink from './ShareLink';
+import ShareSettings from './ShareSettings';
 import './ShareModal.css';
 
+const DEFAULT_SHARE_SETTINGS = {
+  isPublic: true,
+  passwordEnabled: false,
+  password: '',
+  limitResponsesEnabled: false,
+  maxResponses: ''
+};
+
 const ShareModal = ({ form, onClose }) => {
-  const [copied, setCopied] = useState(false);
+  const { updateForm } = useForms();
+  const [shareSettings, setShareSettings] = useState(() => ({
+    ...DEFAULT_SHARE_SETTINGS,
+    ...(form.shareSettings || {}),
+    maxResponses:
+      form.shareSettings?.maxResponses != null
+        ? String(form.shareSettings.maxResponses)
+        : ''
+  }));
+
   const shareUrl = `${window.location.origin}/form/${form.id}`;
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(shareUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  useEffect(() => {
+    setShareSettings({
+      ...DEFAULT_SHARE_SETTINGS,
+      ...(form.shareSettings || {}),
+      maxResponses:
+        form.shareSettings?.maxResponses != null
+          ? String(form.shareSettings.maxResponses)
+          : ''
+    });
+  }, [form]);
+
+  const persistShareSettings = (updater) => {
+    setShareSettings((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : { ...prev, ...updater };
+
+      const maxResponsesNumber = next.maxResponses
+        ? parseInt(next.maxResponses, 10) || null
+        : null;
+
+      updateForm(form.id, {
+        shareSettings: {
+          isPublic: next.isPublic,
+          passwordEnabled: next.passwordEnabled,
+          password: next.password,
+          limitResponsesEnabled: next.limitResponsesEnabled,
+          maxResponses: maxResponsesNumber
+        }
+      });
+
+      return next;
+    });
   };
 
   return (
@@ -19,35 +66,11 @@ const ShareModal = ({ form, onClose }) => {
           <button className="btn-close" onClick={onClose}>×</button>
         </div>
         <div className="modal-body">
-          <div className="share-url-section">
-            <label>Посилання для опитування</label>
-            <div className="url-input-group">
-              <input
-                type="text"
-                className="url-input"
-                value={shareUrl}
-                readOnly
-              />
-              <button className="btn-primary" onClick={copyToClipboard}>
-                {copied ? '✓ Скопійовано' : 'Копіювати'}
-              </button>
-            </div>
-          </div>
-          <div className="share-options-section">
-            <h3>Налаштування доступу</h3>
-            <label className="share-option">
-              <input type="checkbox" defaultChecked />
-              <span>Публічне посилання</span>
-            </label>
-            <label className="share-option">
-              <input type="checkbox" />
-              <span>Захист паролем</span>
-            </label>
-            <label className="share-option">
-              <input type="checkbox" />
-              <span>Обмежити кількість відповідей</span>
-            </label>
-          </div>
+          <ShareLink shareUrl={shareUrl} />
+          <ShareSettings
+            shareSettings={shareSettings}
+            onUpdate={persistShareSettings}
+          />
         </div>
       </div>
     </div>

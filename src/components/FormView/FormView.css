@@ -1,32 +1,58 @@
 .form-view {
   min-height: 100vh;
   padding: 40px 20px;
-  background: var(--bg);
+  background: transparent;
+  /* Handled by global app background */
 }
 
 .form-container {
   max-width: 700px;
   margin: 0 auto;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  /* Glassmorphism */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
   padding: 40px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #8b5cf6, #10b981);
+  transition: width 0.3s ease;
 }
 
 .form-header {
-  margin-bottom: 32px;
+  margin-bottom: 40px;
   text-align: center;
 }
 
 .form-header h1 {
-  margin: 0 0 12px;
-  font-size: 28px;
-  font-weight: 700;
+  margin: 0 0 16px;
+  font-size: 32px;
+  font-weight: 800;
+  background: linear-gradient(to right, #fff, #ccc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .form-description {
   margin: 0;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 16px;
   line-height: 1.6;
 }
@@ -41,12 +67,28 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 16px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.question-block:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.question-block.has-error {
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.05);
 }
 
 .question-label {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
-  color: var(--text);
+  color: #fff;
+  margin-bottom: 8px;
 }
 
 .required {
@@ -57,20 +99,28 @@
 .form-input,
 .form-textarea {
   width: 100%;
-  padding: 12px 16px;
+  padding: 16px;
   font-size: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
   font-family: inherit;
+  transition: all 0.2s;
 }
 
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: var(--primary);
-  background: rgba(255, 255, 255, 0.08);
+  border-color: #8b5cf6;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 14px;
+  margin-top: 8px;
 }
 
 .options-list {
@@ -84,10 +134,10 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 16px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -95,7 +145,8 @@
 .radio-option:hover,
 .checkbox-option:hover {
   background: rgba(255, 255, 255, 0.06);
-  border-color: var(--primary);
+  border-color: #8b5cf6;
+  transform: translateY(-1px);
 }
 
 .radio-option input,
@@ -103,82 +154,147 @@
   width: 20px;
   height: 20px;
   cursor: pointer;
+  accent-color: #8b5cf6;
 }
 
 .scale-input {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .scale-labels {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .scale-slider {
   width: 100%;
-  height: 8px;
-  border-radius: 4px;
+  height: 6px;
+  border-radius: 3px;
   background: rgba(255, 255, 255, 0.1);
   outline: none;
   cursor: pointer;
+  -webkit-appearance: none;
 }
 
 .scale-slider::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  background: var(--primary);
+  background: #8b5cf6;
   cursor: pointer;
+  border: 4px solid #1f2937;
+  box-shadow: 0 0 0 2px #8b5cf6;
+  transition: transform 0.1s;
+}
+
+.scale-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
 }
 
 .scale-value {
   text-align: center;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--primary);
+  font-size: 32px;
+  font-weight: 800;
+  color: #8b5cf6;
 }
 
 .form-footer {
-  margin-top: 8px;
+  margin-top: 16px;
 }
 
 .btn-submit {
   width: 100%;
-  padding: 16px;
-  font-size: 16px;
+  padding: 18px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
 
-.success-message {
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+}
+
+.success-message,
+.access-message {
   text-align: center;
   padding: 40px 20px;
 }
 
 .success-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 24px;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--success);
+  background: linear-gradient(135deg, #10b981, #059669);
   color: white;
   border-radius: 50%;
   font-size: 48px;
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+}
+
+.success-message h2,
+.access-message h2 {
+  margin: 0 0 16px;
+  font-size: 28px;
   font-weight: 700;
 }
 
-.success-message h2 {
-  margin: 0 0 12px;
-  font-size: 24px;
-}
-
-.success-message p {
+.success-message p,
+.access-message p {
   margin: 0 0 32px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 18px;
 }
 
+.password-gate {
+  text-align: center;
+}
+
+.password-form {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.password-error {
+  margin: 0;
+  color: #f87171;
+  font-size: 14px;
+  background: rgba(248, 113, 113, 0.1);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .form-view {
+    padding: 20px 12px;
+  }
+
+  .form-container {
+    padding: 24px 16px;
+    border-radius: 20px;
+  }
+
+  .form-header h1 {
+    font-size: 24px;
+  }
+
+  .question-label {
+    font-size: 16px;
+  }
+}

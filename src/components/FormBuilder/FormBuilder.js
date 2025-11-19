@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useForms } from '../../context/FormsContext';
 import { QUESTION_TYPES, FORM_STATUS } from '../../types';
-import QuestionEditor from './QuestionEditor';
+import FormBuilderHeader from './FormBuilderHeader';
+import FormBuilderCanvas from './FormBuilderCanvas';
 import './FormBuilder.css';
 
 const FormBuilder = () => {
@@ -62,7 +63,7 @@ const FormBuilder = () => {
   const updateQuestion = (id, updates) => {
     setFormData({
       ...formData,
-      questions: formData.questions.map(q => 
+      questions: formData.questions.map(q =>
         q.id === id ? { ...q, ...updates } : q
       )
     });
@@ -77,69 +78,33 @@ const FormBuilder = () => {
 
   const moveQuestion = (id, direction) => {
     const index = formData.questions.findIndex(q => q.id === id);
-    if ((direction === 'up' && index === 0) || 
-        (direction === 'down' && index === formData.questions.length - 1)) {
+    if ((direction === 'up' && index === 0) ||
+      (direction === 'down' && index === formData.questions.length - 1)) {
       return;
     }
     const newIndex = direction === 'up' ? index - 1 : index + 1;
     const newQuestions = [...formData.questions];
-    [newQuestions[index], newQuestions[newIndex]] = 
+    [newQuestions[index], newQuestions[newIndex]] =
       [newQuestions[newIndex], newQuestions[index]];
     setFormData({ ...formData, questions: newQuestions });
   };
 
   return (
     <div className="form-builder">
-      <div className="builder-header">
-        <button className="btn-secondary" onClick={() => setView('dashboard')}>
-          ← Назад
-        </button>
-        <div className="builder-actions">
-          <button className="btn-secondary" onClick={handleSave}>
-            Зберегти
-          </button>
-          <button className="btn-primary" onClick={handlePublish}>
-            Опублікувати
-          </button>
-        </div>
-      </div>
+      <FormBuilderHeader
+        onBack={() => setView('dashboard')}
+        onSave={handleSave}
+        onPublish={handlePublish}
+      />
 
-      <div className="builder-content">
-        <div className="form-settings">
-          <input
-            type="text"
-            className="form-title-input"
-            placeholder="Назва опитування"
-            value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          />
-          <textarea
-            className="form-description-input"
-            placeholder="Опис опитування (необов'язково)"
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            rows="2"
-          />
-        </div>
-
-        <div className="questions-list">
-          {formData.questions.map((question, index) => (
-            <QuestionEditor
-              key={question.id}
-              question={question}
-              index={index}
-              total={formData.questions.length}
-              onUpdate={updateQuestion}
-              onDelete={deleteQuestion}
-              onMove={moveQuestion}
-            />
-          ))}
-        </div>
-
-        <button className="btn-add-question" onClick={addQuestion}>
-          + Додати питання
-        </button>
-      </div>
+      <FormBuilderCanvas
+        formData={formData}
+        setFormData={setFormData}
+        updateQuestion={updateQuestion}
+        deleteQuestion={deleteQuestion}
+        moveQuestion={moveQuestion}
+        addQuestion={addQuestion}
+      />
     </div>
   );
 };

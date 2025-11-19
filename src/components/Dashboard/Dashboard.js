@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { useForms } from '../../context/FormsContext';
 import ShareModal from '../ShareModal/ShareModal';
+import DashboardHeader from './DashboardHeader';
+import DashboardGrid from './DashboardGrid';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const { forms, setView, setCurrentForm, deleteForm } = useForms();
   const [shareForm, setShareForm] = useState(null);
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   const handleCreate = () => {
     setCurrentForm(null);
@@ -31,17 +35,30 @@ const Dashboard = () => {
     setShareForm(form);
   };
 
+  const filteredForms = forms.filter((form) => {
+    const query = search.toLowerCase().trim();
+    const matchesSearch = !query
+      ? true
+      : (form.title || '').toLowerCase().includes(query) ||
+      (form.description || '').toLowerCase().includes(query);
+
+    const matchesStatus =
+      statusFilter === 'all' ? true : form.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+
   return (
     <div className="dashboard">
-      <div className="dashboard-header">
-        <div>
-          <h1>Мої опитування</h1>
-          <p className="subtitle">{forms.length} опитувань</p>
-        </div>
-        <button className="btn-primary" onClick={handleCreate}>
-          + Створити опитування
-        </button>
-      </div>
+      <DashboardHeader
+        formsCount={forms.length}
+        filteredCount={filteredForms.length}
+        search={search}
+        setSearch={setSearch}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        onCreate={handleCreate}
+      />
 
       {forms.length === 0 ? (
         <div className="empty-state">
@@ -53,70 +70,21 @@ const Dashboard = () => {
           </button>
         </div>
       ) : (
-        <div className="forms-grid">
-          {forms.map((form) => (
-            <div key={form.id} className="form-card">
-              <div className="form-card-header">
-                <div>
-                  <h3>{form.title || 'Без назви'}</h3>
-                  <p className="form-meta">
-                    {form.status === 'active' ? '🟢 Активне' : 
-                     form.status === 'closed' ? '🔴 Закрите' : '⚪ Чернетка'}
-                  </p>
-                </div>
-                <div className="form-actions">
-                  <button 
-                    className="btn-icon" 
-                    onClick={() => handleView(form)}
-                    title="Переглянути"
-                  >
-                    👁️
-                  </button>
-                  <button 
-                    className="btn-icon" 
-                    onClick={() => handleEdit(form)}
-                    title="Редагувати"
-                  >
-                    ✏️
-                  </button>
-                  <button 
-                    className="btn-icon" 
-                    onClick={() => handleStats(form)}
-                    title="Статистика"
-                  >
-                    📊
-                  </button>
-                  <button 
-                    className="btn-icon" 
-                    onClick={() => handleShare(form)}
-                    title="Поділитися"
-                  >
-                    🔗
-                  </button>
-                  <button 
-                    className="btn-icon danger" 
-                    onClick={() => deleteForm(form.id)}
-                    title="Видалити"
-                  >
-                    🗑️
-                  </button>
-                </div>
-              </div>
-              <p className="form-description">{form.description || 'Без опису'}</p>
-              <div className="form-stats">
-                <span>👁️ {form.stats?.totalViews || 0}</span>
-                <span>✅ {form.stats?.totalResponses || 0}</span>
-                <span>📈 {form.stats?.completionRate || 0}%</span>
-              </div>
-            </div>
-          ))}
-        </div>
+        <DashboardGrid
+          forms={filteredForms}
+          onView={handleView}
+          onEdit={handleEdit}
+          onStats={handleStats}
+          onShare={handleShare}
+          onDelete={deleteForm}
+          onCreate={handleCreate}
+        />
       )}
 
       {shareForm && (
-        <ShareModal 
-          form={shareForm} 
-          onClose={() => setShareForm(null)} 
+        <ShareModal
+          form={shareForm}
+          onClose={() => setShareForm(null)}
         />
       )}
     </div>

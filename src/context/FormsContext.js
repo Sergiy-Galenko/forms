@@ -1,7 +1,15 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { FORM_STATUS } from '../types';
 
 const FormsContext = createContext();
+
+const DEFAULT_SHARE_SETTINGS = {
+  isPublic: true,
+  passwordEnabled: false,
+  password: '',
+  limitResponsesEnabled: false,
+  maxResponses: null
+};
 
 export const useForms = () => {
   const context = useContext(FormsContext);
@@ -20,15 +28,38 @@ export const FormsProvider = ({ children }) => {
   const [currentForm, setCurrentForm] = useState(null);
   const [view, setView] = useState('dashboard'); // dashboard, create, edit, view, stats
 
+  // Ініціалізація з URL: /form/:id відкриває публічний перегляд опитування
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const path = window.location.pathname;
+    const match = path.match(/^\/form\/([^/]+)$/);
+
+    if (match) {
+      const formId = match[1];
+      const form = forms.find((f) => f.id === formId);
+      if (form) {
+        setCurrentForm(form);
+        setView('view');
+      }
+    }
+  }, []);
+
   const saveForms = useCallback((newForms) => {
     setForms(newForms);
     localStorage.setItem('forms', JSON.stringify(newForms));
   }, []);
 
   const createForm = useCallback((formData) => {
+    const shareSettings = {
+      ...DEFAULT_SHARE_SETTINGS,
+      ...(formData.shareSettings || {})
+    };
+
     const newForm = {
       id: Date.now().toString(),
       ...formData,
+      shareSettings,
       status: FORM_STATUS.DRAFT,
       createdAt: new Date().toISOString(),
       responses: [],
