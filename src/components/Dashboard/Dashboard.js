@@ -3,6 +3,7 @@ import { useForms } from '../../context/FormsContext';
 import ShareModal from '../ShareModal/ShareModal';
 import DashboardHeader from './DashboardHeader';
 import DashboardGrid from './DashboardGrid';
+import { Button } from '../UI/Button';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -65,9 +66,9 @@ const Dashboard = () => {
           <div className="empty-icon">📋</div>
           <h2>Поки що немає опитувань</h2>
           <p>Створіть перше опитування, щоб почати збирати відповіді</p>
-          <button className="btn-primary" onClick={handleCreate}>
+          <Button variant="primary" onClick={handleCreate}>
             Створити опитування
-          </button>
+          </Button>
         </div>
       ) : (
         <DashboardGrid

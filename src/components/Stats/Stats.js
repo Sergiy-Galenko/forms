@@ -3,6 +3,7 @@ import { QUESTION_TYPES } from '../../types';
 import StatsSummary from './StatsSummary';
 import StatsChart from './StatsChart';
 import StatsResponses from './StatsResponses';
+import { Button } from '../UI/Button';
 import './Stats.css';
 
 const Stats = () => {
@@ -50,9 +51,9 @@ const Stats = () => {
   return (
     <div className="stats-page">
       <div className="stats-header">
-        <button className="btn-secondary" onClick={() => setView('dashboard')}>
+        <Button variant="secondary" onClick={() => setView('dashboard')}>
           ← Назад
-        </button>
+        </Button>
         <div>
           <h1>{currentForm.title}</h1>
           <p className="stats-subtitle">Статистика та аналітика</p>

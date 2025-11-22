@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card, CardHeader, CardBody, CardFooter, CardTitle, CardSubtitle } from '../UI/Card';
 import './Dashboard.css';
 
 const DashboardGrid = ({
@@ -23,17 +24,17 @@ const DashboardGrid = ({
     return (
         <div className="forms-grid">
             {forms.map((form) => (
-                <div key={form.id} className="form-card">
+                <Card key={form.id} hoverable className="form-card">
                     <div className="form-card-header">
                         <div>
-                            <h3>{form.title || 'Без назви'}</h3>
-                            <p className="form-meta">
+                            <CardTitle>{form.title || 'Без назви'}</CardTitle>
+                            <CardSubtitle className="form-meta">
                                 {form.status === 'active'
                                     ? '🟢 Активне'
                                     : form.status === 'closed'
                                         ? '🔴 Закрите'
                                         : '⚪ Чернетка'}
-                            </p>
+                            </CardSubtitle>
                         </div>
                         <div className="form-actions">
                             <button
@@ -79,7 +80,7 @@ const DashboardGrid = ({
                         <span>✅ {form.stats?.totalResponses || 0}</span>
                         <span>📈 {form.stats?.completionRate || 0}%</span>
                     </div>
-                </div>
+                </Card>
             ))}
         </div>
     );

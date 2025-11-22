@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '../UI/Button';
 import './FormView.css';
 
 const FormSuccess = ({ setView }) => {
@@ -9,9 +10,9 @@ const FormSuccess = ({ setView }) => {
                     <div className="success-icon">✓</div>
                     <h2>Дякуємо за відповідь!</h2>
                     <p>Ваші відповіді успішно збережено.</p>
-                    <button className="btn-primary" onClick={() => setView('dashboard')}>
+                    <Button variant="primary" onClick={() => setView('dashboard')}>
                         Повернутися до дашборду
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

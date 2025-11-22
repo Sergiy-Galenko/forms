@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Input } from '../UI/Input';
+import { Button } from '../UI/Button';
 import './FormView.css';
 
 const FormAccessControl = ({
@@ -59,17 +61,17 @@ const FormAccessControl = ({
                             }
                         }}
                     >
-                        <input
+                        <Input
                             type="password"
-                            className="form-input"
                             placeholder="Введіть пароль"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            error={passwordError}
+                            className="form-input-wrapper"
                         />
-                        {passwordError && <p className="password-error">{passwordError}</p>}
-                        <button type="submit" className="btn-primary btn-submit">
+                        <Button type="submit" variant="primary" fullWidth className="btn-submit">
                             Продовжити
-                        </button>
+                        </Button>
                     </form>
                 </div>
             </div>

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Input } from '../UI/Input';
+import { Button } from '../UI/Button';
 import './ShareModal.css';
 
 const ShareLink = ({ shareUrl }) => {
@@ -14,15 +16,14 @@ const ShareLink = ({ shareUrl }) => {
         <div className="share-url-section">
             <label>Посилання для опитування</label>
             <div className="url-input-group">
-                <input
-                    type="text"
-                    className="url-input"
+                <Input
                     value={shareUrl}
                     readOnly
+                    className="url-input-wrapper"
                 />
-                <button className="btn-primary" onClick={copyToClipboard}>
+                <Button variant="primary" onClick={copyToClipboard}>
                     {copied ? '✓ Скопійовано' : 'Копіювати'}
-                </button>
+                </Button>
             </div>
         </div>
     );

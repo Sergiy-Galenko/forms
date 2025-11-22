@@ -1,5 +1,7 @@
 import React from 'react';
 import QuestionEditor from './QuestionEditor';
+import { Input, TextArea } from '../UI/Input';
+import { Button } from '../UI/Button';
 import './FormBuilder.css';
 
 const FormBuilderCanvas = ({
@@ -13,19 +15,18 @@ const FormBuilderCanvas = ({
     return (
         <div className="builder-content">
             <div className="form-settings">
-                <input
-                    type="text"
-                    className="form-title-input"
-                    placeholder="Назва опитування"
+                <Input
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    placeholder="Назва опитування"
+                    className="form-title-input-wrapper"
+                    style={{ fontSize: '1.5rem', fontWeight: 'bold' }}
                 />
-                <textarea
-                    className="form-description-input"
-                    placeholder="Опис опитування (необов'язково)"
+                <TextArea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    rows="2"
+                    placeholder="Опис опитування (необов'язково)"
+                    rows={2}
                 />
             </div>
 
@@ -43,9 +44,14 @@ const FormBuilderCanvas = ({
                 ))}
             </div>
 
-            <button className="btn-add-question" onClick={addQuestion}>
+            <Button
+                variant="ghost"
+                className="btn-add-question"
+                onClick={addQuestion}
+                fullWidth
+            >
                 + Додати питання
-            </button>
+            </Button>
         </div>
     );
 };

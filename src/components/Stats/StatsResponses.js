@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card } from '../UI/Card';
 import './Stats.css';
 
 const StatsResponses = ({ responses, currentForm }) => {
@@ -9,7 +10,7 @@ const StatsResponses = ({ responses, currentForm }) => {
             <h2>Останні відповіді</h2>
             <div className="responses-grid">
                 {responses.slice(-10).reverse().map((response) => (
-                    <div key={response.id} className="response-card">
+                    <Card key={response.id} className="response-card">
                         <div className="response-date">
                             {new Date(response.submittedAt).toLocaleString('uk-UA')}
                         </div>
@@ -27,7 +28,7 @@ const StatsResponses = ({ responses, currentForm }) => {
                                 );
                             })}
                         </div>
-                    </div>
+                    </Card>
                 ))}
             </div>
         </div>

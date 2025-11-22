@@ -1,19 +1,20 @@
 import React from 'react';
+import { Button } from '../UI/Button';
 import './FormBuilder.css';
 
 const FormBuilderHeader = ({ onBack, onSave, onPublish }) => {
     return (
         <div className="builder-header">
-            <button className="btn-secondary" onClick={onBack}>
+            <Button variant="secondary" onClick={onBack}>
                 ← Назад
-            </button>
+            </Button>
             <div className="builder-actions">
-                <button className="btn-secondary" onClick={onSave}>
+                <Button variant="secondary" onClick={onSave}>
                     Зберегти
-                </button>
-                <button className="btn-primary" onClick={onPublish}>
+                </Button>
+                <Button variant="primary" onClick={onPublish}>
                     Опублікувати
-                </button>
+                </Button>
             </div>
         </div>
     );

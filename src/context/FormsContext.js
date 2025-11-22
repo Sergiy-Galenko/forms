@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { FORM_STATUS } from '../types';
+import { storageService } from '../services/StorageService';
 
 const FormsContext = createContext();
 
@@ -20,15 +21,13 @@ export const useForms = () => {
 };
 
 export const FormsProvider = ({ children }) => {
-  const [forms, setForms] = useState(() => {
-    const saved = localStorage.getItem('forms');
-    return saved ? JSON.parse(saved) : [];
-  });
-
+  const [forms, setForms] = useState(() => storageService.getForms());
   const [currentForm, setCurrentForm] = useState(null);
   const [view, setView] = useState('dashboard'); // dashboard, create, edit, view, stats
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Ініціалізація з URL: /form/:id відкриває публічний перегляд опитування
+  // Initialize from URL
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -43,11 +42,17 @@ export const FormsProvider = ({ children }) => {
         setView('view');
       }
     }
-  }, []);
+  }, [forms]); // Added forms dependency to ensure it runs after initial load if needed
 
   const saveForms = useCallback((newForms) => {
-    setForms(newForms);
-    localStorage.setItem('forms', JSON.stringify(newForms));
+    try {
+      setForms(newForms);
+      storageService.saveForms(newForms);
+      setError(null);
+    } catch (err) {
+      console.error('Failed to save forms:', err);
+      setError('Failed to save changes. Please try again.');
+    }
   }, []);
 
   const createForm = useCallback((formData) => {
@@ -70,59 +75,78 @@ export const FormsProvider = ({ children }) => {
         averageTime: 0
       }
     };
-    const updated = [...forms, newForm];
-    saveForms(updated);
+
+    // Use functional update to ensure we have latest state
+    setForms(prevForms => {
+      const updated = [...prevForms, newForm];
+      storageService.saveForms(updated);
+      return updated;
+    });
+
     return newForm;
-  }, [forms, saveForms]);
+  }, []);
 
   const updateForm = useCallback((id, updates) => {
-    const updated = forms.map(form => 
-      form.id === id ? { ...form, ...updates } : form
-    );
-    saveForms(updated);
-    if (currentForm?.id === id) {
-      setCurrentForm(updated.find(f => f.id === id));
-    }
-  }, [forms, saveForms, currentForm]);
+    setForms(prevForms => {
+      const updated = prevForms.map(form =>
+        form.id === id ? { ...form, ...updates } : form
+      );
+      storageService.saveForms(updated);
+
+      // Update current form if it's the one being modified
+      if (currentForm?.id === id) {
+        setCurrentForm(updated.find(f => f.id === id));
+      }
+
+      return updated;
+    });
+  }, [currentForm]);
 
   const deleteForm = useCallback((id) => {
-    const updated = forms.filter(form => form.id !== id);
-    saveForms(updated);
+    setForms(prevForms => {
+      const updated = prevForms.filter(form => form.id !== id);
+      storageService.saveForms(updated);
+      return updated;
+    });
+
     if (currentForm?.id === id) {
       setCurrentForm(null);
       setView('dashboard');
     }
-  }, [forms, saveForms, currentForm]);
+  }, [currentForm]);
 
   const addResponse = useCallback((formId, response) => {
-    const form = forms.find(f => f.id === formId);
-    if (!form) return;
+    setForms(prevForms => {
+      const form = prevForms.find(f => f.id === formId);
+      if (!form) return prevForms;
 
-    const newResponse = {
-      id: Date.now().toString(),
-      ...response,
-      submittedAt: new Date().toISOString()
-    };
+      const newResponse = {
+        id: Date.now().toString(),
+        ...response,
+        submittedAt: new Date().toISOString()
+      };
 
-    const updated = forms.map(f => {
-      if (f.id === formId) {
-        const responses = [...f.responses, newResponse];
-        const stats = calculateStats(f, responses);
-        return { ...f, responses, stats };
-      }
-      return f;
+      const responses = [...form.responses, newResponse];
+      const stats = calculateStats(form, responses);
+
+      const updatedForm = { ...form, responses, stats };
+
+      const updatedForms = prevForms.map(f =>
+        f.id === formId ? updatedForm : f
+      );
+
+      storageService.saveForms(updatedForms);
+      return updatedForms;
     });
-
-    saveForms(updated);
-  }, [forms, saveForms]);
+  }, []);
 
   const calculateStats = (form, responses) => {
     const totalResponses = responses.length;
     const totalViews = form.stats?.totalViews || 0;
-    const completionRate = totalViews > 0 
-      ? Math.round((totalResponses / totalViews) * 100) 
+    const completionRate = totalViews > 0
+      ? Math.round((totalResponses / totalViews) * 100)
       : 0;
-    
+
     // Calculate average time (mock for now)
     const averageTime = totalResponses > 0 ? Math.floor(Math.random() * 300 + 120) : 0;
 
@@ -138,6 +162,8 @@ export const FormsProvider = ({ children }) => {
     forms,
     currentForm,
     view,
+    isLoading,
+    error,
     setView,
     setCurrentForm,
     createForm,

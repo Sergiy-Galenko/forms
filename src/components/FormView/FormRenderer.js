@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { QUESTION_TYPES } from '../../types';
+import { Input, TextArea } from '../UI/Input';
+import { Button } from '../UI/Button';
 import './FormView.css';
 
 const FormRenderer = ({ currentForm, onSubmit }) => {
@@ -78,22 +80,23 @@ const FormRenderer = ({ currentForm, onSubmit }) => {
                                 </label>
 
                                 {question.type === QUESTION_TYPES.TEXT && (
-                                    <input
-                                        type="text"
-                                        className="form-input"
+                                    <Input
                                         value={answers[question.id] || ''}
                                         onChange={(e) => handleAnswer(question.id, e.target.value)}
                                         onBlur={() => handleBlur(question.id)}
+                                        error={error}
+                                        className="form-input-wrapper"
                                     />
                                 )}
 
                                 {question.type === QUESTION_TYPES.TEXTAREA && (
-                                    <textarea
-                                        className="form-textarea"
+                                    <TextArea
                                         value={answers[question.id] || ''}
                                         onChange={(e) => handleAnswer(question.id, e.target.value)}
                                         onBlur={() => handleBlur(question.id)}
-                                        rows="4"
+                                        rows={4}
+                                        error={error}
+                                        className="form-textarea-wrapper"
                                     />
                                 )}
 
@@ -112,6 +115,7 @@ const FormRenderer = ({ currentForm, onSubmit }) => {
                                                 <span>{option.text}</span>
                                             </label>
                                         ))}
+                                        {error && <div className="error-message">{error}</div>}
                                     </div>
                                 )}
 
@@ -134,6 +138,7 @@ const FormRenderer = ({ currentForm, onSubmit }) => {
                                                 <span>{option.text}</span>
                                             </label>
                                         ))}
+                                        {error && <div className="error-message">{error}</div>}
                                     </div>
                                 )}
 
@@ -159,48 +164,50 @@ const FormRenderer = ({ currentForm, onSubmit }) => {
                                         <div className="scale-value">
                                             {answers[question.id] || question.scale?.min || 1}
                                         </div>
+                                        {error && <div className="error-message">{error}</div>}
                                     </div>
                                 )}
 
                                 {question.type === QUESTION_TYPES.EMAIL && (
-                                    <input
+                                    <Input
                                         type="email"
-                                        className="form-input"
                                         value={answers[question.id] || ''}
                                         onChange={(e) => handleAnswer(question.id, e.target.value)}
                                         onBlur={() => handleBlur(question.id)}
+                                        error={error}
+                                        className="form-input-wrapper"
                                     />
                                 )}
 
                                 {question.type === QUESTION_TYPES.NUMBER && (
-                                    <input
+                                    <Input
                                         type="number"
-                                        className="form-input"
                                         value={answers[question.id] || ''}
                                         onChange={(e) => handleAnswer(question.id, e.target.value)}
                                         onBlur={() => handleBlur(question.id)}
+                                        error={error}
+                                        className="form-input-wrapper"
                                     />
                                 )}
 
                                 {question.type === QUESTION_TYPES.DATE && (
-                                    <input
+                                    <Input
                                         type="date"
-                                        className="form-input"
                                         value={answers[question.id] || ''}
                                         onChange={(e) => handleAnswer(question.id, e.target.value)}
                                         onBlur={() => handleBlur(question.id)}
+                                        error={error}
+                                        className="form-input-wrapper"
                                     />
                                 )}
-
-                                {error && <div className="error-message">{error}</div>}
                             </div>
                         );
                     })}
 
                     <div className="form-footer">
-                        <button type="submit" className="btn-primary btn-submit">
+                        <Button type="submit" variant="primary" fullWidth className="btn-submit">
                             Відправити
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>

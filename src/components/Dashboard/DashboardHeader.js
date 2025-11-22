@@ -1,4 +1,6 @@
 import React from 'react';
+import { Input } from '../UI/Input';
+import { Button } from '../UI/Button';
 import './Dashboard.css';
 
 const DashboardHeader = ({
@@ -23,12 +25,12 @@ const DashboardHeader = ({
             </div>
             <div className="dashboard-controls">
                 <div className="dashboard-filters">
-                    <input
-                        type="text"
-                        className="dashboard-search"
-                        placeholder="Пошук за назвою або описом..."
+                    <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Пошук за назвою або описом..."
+                        className="dashboard-search-wrapper"
+                        style={{ minWidth: '260px' }}
                     />
                     <select
                         className="dashboard-select"
@@ -41,9 +43,9 @@ const DashboardHeader = ({
                         <option value="closed">Закриті</option>
                     </select>
                 </div>
-                <button className="btn-primary" onClick={onCreate}>
+                <Button variant="primary" onClick={onCreate}>
                     + Створити опитування
-                </button>
+                </Button>
             </div>
         </div>
     );

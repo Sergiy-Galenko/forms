@@ -1,5 +1,6 @@
 import React from 'react';
 import { QUESTION_TYPES } from '../../types';
+import { Card } from '../UI/Card';
 import './Stats.css';
 
 const StatsChart = ({ currentForm, getQuestionStats, responses }) => {
@@ -9,7 +10,7 @@ const StatsChart = ({ currentForm, getQuestionStats, responses }) => {
             {currentForm.questions.map((question, index) => {
                 const questionStats = getQuestionStats(question);
                 return (
-                    <div key={question.id} className="question-stats-card">
+                    <Card key={question.id} className="question-stats-card">
                         <div className="question-stats-header">
                             <span className="question-number">{index + 1}</span>
                             <h3>{question.title}</h3>
@@ -67,7 +68,7 @@ const StatsChart = ({ currentForm, getQuestionStats, responses }) => {
                                 )}
                             </div>
                         )}
-                    </div>
+                    </Card>
                 );
             })}
         </div>

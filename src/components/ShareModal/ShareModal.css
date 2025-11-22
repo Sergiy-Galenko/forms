@@ -11,17 +11,17 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 20px;
+  padding: var(--spacing-md);
 }
 
 .modal-content {
-  background: #1f2937;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
-  animation: modalSlideUp 0.3s ease-out;
+  box-shadow: var(--shadow-2xl);
+  animation: modalSlideUp var(--transition-normal);
 }
 
 @keyframes modalSlideUp {
@@ -37,8 +37,8 @@
 }
 
 .modal-header {
-  padding: 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -46,74 +46,74 @@
 
 .modal-header h2 {
   margin: 0;
-  font-size: 20px;
+  font-size: var(--font-size-xl);
   font-weight: 600;
-  color: #fff;
+  color: var(--color-text-primary);
 }
 
 .btn-close {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 24px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-2xl);
   line-height: 1;
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: all 0.2s;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
 }
 
 .btn-close:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+  background: var(--color-background);
 }
 
 .modal-body {
-  padding: 24px;
+  padding: var(--spacing-lg);
 }
 
 .share-url-section {
-  margin-bottom: 32px;
+  margin-bottom: var(--spacing-xl);
 }
 
 .share-url-section label {
   display: block;
-  margin-bottom: 8px;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 14px;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
 }
 
 .url-input-group {
   display: flex;
-  gap: 12px;
+  gap: var(--spacing-sm);
 }
 
 .url-input {
   flex: 1;
-  padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  color: #fff;
-  font-size: 14px;
+  padding: 0.625rem 1rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
   font-family: inherit;
 }
 
 .url-input:focus {
   outline: none;
-  border-color: #8b5cf6;
+  border-color: var(--color-primary);
 }
 
 .share-options-section h3 {
-  margin: 0 0 20px;
-  font-size: 16px;
+  margin: 0 0 var(--spacing-md);
+  font-size: var(--font-size-base);
   font-weight: 600;
-  color: #fff;
+  color: var(--color-text-primary);
 }
 
 .share-option {
   display: block;
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-md);
   cursor: pointer;
 }
 
@@ -124,44 +124,44 @@
 .share-option-main {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 4px;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
 }
 
 .share-option-main input[type="checkbox"] {
   width: 20px;
   height: 20px;
-  accent-color: #8b5cf6;
+  accent-color: var(--color-primary);
   cursor: pointer;
 }
 
 .share-option-main span {
   font-weight: 500;
-  color: #fff;
+  color: var(--color-text-primary);
 }
 
 .share-option-description {
   margin: 0 0 0 32px;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
   line-height: 1.4;
 }
 
 .share-option-extra {
-  margin: 12px 0 0 32px;
+  margin: var(--spacing-sm) 0 0 32px;
 }
 
 .share-option-input {
   width: 100%;
-  padding: 10px 16px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: #fff;
-  font-size: 14px;
+  padding: 0.625rem 1rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
 }
 
 .share-option-input:focus {
   outline: none;
-  border-color: #8b5cf6;
+  border-color: var(--color-primary);
 }

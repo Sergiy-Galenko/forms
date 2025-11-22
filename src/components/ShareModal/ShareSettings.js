@@ -1,4 +1,5 @@
 import React from 'react';
+import { Input } from '../UI/Input';
 import './ShareModal.css';
 
 const ShareSettings = ({ shareSettings, onUpdate }) => {
@@ -36,14 +37,14 @@ const ShareSettings = ({ shareSettings, onUpdate }) => {
                 </div>
                 {shareSettings.passwordEnabled && (
                     <div className="share-option-extra">
-                        <input
+                        <Input
                             type="password"
-                            className="share-option-input"
                             placeholder="Введіть пароль для доступу"
                             value={shareSettings.password}
                             onChange={(e) =>
                                 onUpdate({ password: e.target.value })
                             }
+                            className="share-option-input-wrapper"
                         />
                     </div>
                 )}
@@ -64,16 +65,16 @@ const ShareSettings = ({ shareSettings, onUpdate }) => {
                 </div>
                 {shareSettings.limitResponsesEnabled && (
                     <div className="share-option-extra">
-                        <input
+                        <Input
                             type="number"
                             min="1"
-                            className="share-option-input"
                             placeholder="Наприклад, 100"
                             value={shareSettings.maxResponses}
                             onChange={(e) => {
                                 const value = e.target.value.replace(/[^0-9]/g, '');
                                 onUpdate({ maxResponses: value });
                             }}
+                            className="share-option-input-wrapper"
                         />
                     </div>
                 )}
