@@ -7,7 +7,7 @@
 .form-container {
   max-width: 700px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--color-surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--color-border);
@@ -16,6 +16,12 @@
   box-shadow: var(--shadow-xl);
   position: relative;
   overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-container {
+    background: rgba(30, 41, 59, 0.95);
+  }
 }
 
 /* Progress Bar */

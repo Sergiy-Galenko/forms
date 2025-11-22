@@ -7,32 +7,47 @@
 
 .input-label {
     font-size: var(--font-size-sm);
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
     color: var(--color-text-primary);
+    line-height: var(--line-height-normal);
+    margin-bottom: 0.25rem;
 }
 
 .input-field {
     width: 100%;
-    padding: 0.625rem 1rem;
+    padding: 0.75rem 1rem;
     font-size: var(--font-size-base);
-    line-height: 1.5;
+    line-height: var(--line-height-normal);
     color: var(--color-text-primary);
     background-color: var(--color-surface);
-    border: 1px solid var(--color-border);
+    border: 2px solid var(--color-border);
     border-radius: var(--radius-md);
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+    min-height: 44px; /* Мінімальний розмір для доступності (touch target) */
+    font-family: inherit;
 }
 
 .input-field:focus {
+    outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    background-color: var(--color-surface);
+}
+
+.input-field:hover:not(:disabled):not(:focus) {
+    border-color: var(--color-border-hover);
+}
+
+.input-field::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.7;
 }
 
 .input-field:disabled {
-    background-color: var(--color-background);
+    background-color: var(--color-surface-secondary);
     cursor: not-allowed;
-    opacity: 0.7;
+    opacity: 0.6;
+    border-color: var(--color-border);
 }
 
 .input-error {
@@ -40,16 +55,41 @@
 }
 
 .input-error:focus {
+    border-color: var(--color-error);
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
 .input-error-message {
-    font-size: 0.75rem;
+    font-size: var(--font-size-sm);
     color: var(--color-error);
     margin-top: 0.25rem;
+    font-weight: var(--font-weight-medium);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .input-helper {
-    font-size: 0.75rem;
+    font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
+    margin-top: 0.25rem;
+    line-height: var(--line-height-normal);
+}
+
+/* Textarea специфічні стилі */
+textarea.input-field {
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+/* Покращення для доступності - кращий контраст */
+@media (prefers-contrast: high) {
+    .input-field {
+        border-width: 2px;
+    }
+    
+    .input-field:focus {
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.3);
+    }
 }

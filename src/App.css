@@ -1,47 +1,32 @@
-:root {
-  --bg: #0f172a;
-  --panel: rgba(255, 255, 255, 0.05);
-  --border: rgba(255, 255, 255, 0.1);
-  --text: #f8fafc;
-  --muted: #94a3b8;
-  --primary: #8b5cf6;
-  --primary-hover: #7c3aed;
-  --danger: #ef4444;
-  --success: #10b981;
-  --info: #3b82f6;
-}
-
-body {
-  margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--bg);
-  color: var(--text);
-  overflow-x: hidden;
-}
-
 .app {
   position: relative;
   min-height: 100vh;
   z-index: 1;
+  background-color: var(--color-background);
+  transition: background-color var(--transition-normal);
 }
 
+/* Декоративні розмиті елементи з адаптивністю */
 .blur {
   position: fixed;
   filter: blur(120px);
-  opacity: 0.4;
+  opacity: 0.15;
   z-index: -1;
   pointer-events: none;
   border-radius: 50%;
+  transition: opacity var(--transition-normal);
+}
+
+@media (prefers-color-scheme: dark) {
+  .blur {
+    opacity: 0.25;
+  }
 }
 
 .blur-one {
   width: 400px;
   height: 400px;
-  background: #8b5cf6;
+  background: var(--color-primary);
   top: -100px;
   left: -100px;
   animation: float 10s infinite ease-in-out;
@@ -50,7 +35,7 @@ body {
 .blur-two {
   width: 350px;
   height: 350px;
-  background: #10b981;
+  background: var(--color-success);
   right: -100px;
   bottom: 50px;
   animation: float 12s infinite ease-in-out reverse;
@@ -59,10 +44,10 @@ body {
 .blur-three {
   width: 300px;
   height: 300px;
-  background: #3b82f6;
+  background: var(--color-info);
   top: 40%;
   left: 30%;
-  opacity: 0.2;
+  opacity: 0.1;
   animation: float 15s infinite ease-in-out 2s;
 }
 
@@ -80,44 +65,25 @@ body {
   }
 }
 
-/* Global Button Styles */
-.btn-primary {
-  background: linear-gradient(135deg, #8b5cf6, #6366f1);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+/* Вимкнення анімацій для користувачів, які вказали prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .blur-one,
+  .blur-two,
+  .blur-three {
+    animation: none;
+  }
+  
+  .blur {
+    filter: blur(80px);
+    opacity: 0.08;
+  }
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-}
-
+/* Адаптивність для мобільних */
 @media (max-width: 640px) {
   .blur {
     filter: blur(80px);
-    opacity: 0.3;
+    opacity: 0.1;
   }
 
   .blur-one {
@@ -128,5 +94,16 @@ body {
   .blur-two {
     width: 200px;
     height: 200px;
+  }
+
+  .blur-three {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .blur-one,
+  .blur-two {
+    display: none;
   }
 }
