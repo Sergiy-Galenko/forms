@@ -1,11 +1,7 @@
-.site {
+.App {
   min-height: 100vh;
-  background: var(--color-background);
-  color: var(--color-text-primary);
+  display: flex;
+  flex-direction: column;
 }
 
-.site-main {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 1.5rem 1rem 3rem;
-}
+/* Remove default app CSS as we're using index.css */

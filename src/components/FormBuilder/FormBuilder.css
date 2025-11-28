@@ -1,11 +1,11 @@
 .form-builder {
-  padding: 1.5rem 0;
+  padding: 2rem 1rem;
   max-width: 1000px;
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
 .builder-header {
@@ -13,14 +13,15 @@
   top: 0;
   z-index: 100;
   background: var(--color-surface);
-  padding: 0.85rem 1rem;
+  padding: 1rem 1.25rem;
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 1.25rem;
   align-items: center;
+  transition: box-shadow var(--transition-fast);
 }
 
 .builder-header-left {
@@ -125,11 +126,16 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
-  padding: 1rem;
+  padding: 1.5rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-fast);
+}
+
+.form-settings:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .form-title-input-wrapper .input-field {
@@ -176,11 +182,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  border: 1px dashed var(--color-border);
+  gap: var(--spacing-lg);
+  padding: 1.25rem;
+  border: 2px dashed var(--color-border);
   border-radius: var(--radius-lg);
-  background: var(--color-surface);
+  background: var(--color-surface-secondary);
+  transition: border-color var(--transition-fast);
+}
+
+.builder-quick-add:hover {
+  border-color: var(--color-primary);
 }
 
 .quick-title {
@@ -198,6 +209,7 @@
   display: flex;
   gap: var(--spacing-sm);
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .questions-list {
@@ -228,21 +240,33 @@
   background: var(--color-surface-secondary);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .form-builder {
-    padding: var(--spacing-md);
-    gap: var(--spacing-lg);
+    padding: 1rem;
+    gap: 1.25rem;
   }
 
   .builder-header {
     flex-direction: column;
     align-items: stretch;
     position: static;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .builder-header-left {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .builder-status {
+    order: 2;
   }
 
   .builder-actions {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: stretch;
+    gap: 0.75rem;
   }
 
   .builder-actions button {
@@ -251,10 +275,24 @@
 
   .builder-quick-add {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .quick-buttons {
+    justify-content: stretch;
+  }
+
+  .quick-buttons button {
+    flex: 1;
+    min-width: 0;
   }
 
   .form-settings {
-    padding: var(--spacing-md);
+    padding: 1rem;
+  }
+
+  .builder-overview {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
 }

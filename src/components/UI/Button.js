@@ -1,34 +1,50 @@
 import React from 'react';
 import './Button.css';
 
-export const Button = ({
+const Button = ({
     children,
     variant = 'primary',
     size = 'md',
-    fullWidth = false,
-    className = '',
+    icon: Icon,
+    iconPosition = 'left',
+    isLoading = false,
     disabled = false,
+    fullWidth = false,
     onClick,
     type = 'button',
+    className = '',
     ...props
 }) => {
-    const classes = [
+    const classNames = [
         'btn',
         `btn-${variant}`,
-        size !== 'md' ? `btn-${size}` : '',
-        fullWidth ? 'btn-full' : '',
+        `btn-${size}`,
+        fullWidth && 'btn-full',
+        isLoading && 'btn-loading',
         className
     ].filter(Boolean).join(' ');
 
     return (
         <button
             type={type}
-            className={classes}
-            disabled={disabled}
+            className={classNames}
             onClick={onClick}
+            disabled={disabled || isLoading}
             {...props}
         >
-            {children}
+            {isLoading && (
+                <span className="btn-spinner"></span>
+            )}
+            {!isLoading && Icon && iconPosition === 'left' && (
+                <Icon className="btn-icon btn-icon-left" />
+            )}
+            <span className="btn-text">{children}</span>
+            {!isLoading && Icon && iconPosition === 'right' && (
+                <Icon className="btn-icon btn-icon-right" />
+            )}
         </button>
     );
 };
+
+export { Button };
+export default Button;

@@ -1,5 +1,4 @@
 import { useForms } from '../../context/FormsContext';
-import { QUESTION_TYPES } from '../../types';
 import StatsSummary from './StatsSummary';
 import StatsChart from './StatsChart';
 import StatsResponses from './StatsResponses';

@@ -1,40 +1,32 @@
 import React from 'react';
 import './Card.css';
 
-export const Card = ({
+const Card = ({
     children,
-    className = '',
+    variant = 'default',
+    glass = false,
     hoverable = false,
+    padding = 'md',
+    className = '',
     onClick,
     ...props
 }) => {
+    const classNames = [
+        'card',
+        `card-${variant}`,
+        `card-padding-${padding}`,
+        glass && 'card-glass',
+        hoverable && 'card-hoverable',
+        onClick && 'card-clickable',
+        className
+    ].filter(Boolean).join(' ');
+
     return (
-        <div
-            className={`card ${hoverable ? 'card-hover' : ''} ${className}`}
-            onClick={onClick}
-            {...props}
-        >
+        <div className={classNames} onClick={onClick} {...props}>
             {children}
         </div>
     );
 };
 
-export const CardHeader = ({ children, className = '' }) => (
-    <div className={`card-header ${className}`}>{children}</div>
-);
-
-export const CardBody = ({ children, className = '' }) => (
-    <div className={`card-body ${className}`}>{children}</div>
-);
-
-export const CardFooter = ({ children, className = '' }) => (
-    <div className={`card-footer ${className}`}>{children}</div>
-);
-
-export const CardTitle = ({ children, className = '' }) => (
-    <h3 className={`card-title ${className}`}>{children}</h3>
-);
-
-export const CardSubtitle = ({ children, className = '' }) => (
-    <p className={`card-subtitle ${className}`}>{children}</p>
-);
+export { Card };
+export default Card;

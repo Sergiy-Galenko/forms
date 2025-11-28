@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { FORM_STATUS } from '../types';
 import { storageService } from '../services/StorageService';
 
@@ -27,12 +28,11 @@ export const FormsProvider = ({ children }) => {
   const [forms, setForms] = useState(() => storageService.getForms());
   const [currentForm, setCurrentForm] = useState(null);
   const [view, setView] = useState('dashboard'); // dashboard, create, edit, view, stats
+  const location = useLocation();
 
   // Initialize from URL
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const path = window.location.pathname;
+    const path = location.pathname;
     const match = path.match(/^\/form\/([^/]+)$/);
 
     if (match) {
@@ -42,8 +42,13 @@ export const FormsProvider = ({ children }) => {
         setCurrentForm(form);
         setView('view');
       }
+    } else if (path === '/forms' || path === '/') {
+      // Optional: Reset view if navigating back to dashboard
+      // But be careful not to override 'create' or 'edit' if they are set via state, 
+      // although usually they are set via buttons.
+      // For now, let's just handle the form view case to fix the bug.
     }
-  }, [forms]); // Added forms dependency to ensure it runs after initial load if needed
+  }, [forms, location]);
 
   const createForm = useCallback((formData) => {
     const shareSettings = {

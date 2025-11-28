@@ -1,7 +1,7 @@
-.input-wrapper {
+.input-container {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: var(--space-2);
     width: 100%;
 }
 
@@ -9,86 +9,135 @@
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     color: var(--color-text-primary);
-    line-height: var(--line-height-normal);
-    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.input-required {
+    color: var(--color-danger);
+    margin-left: var(--space-1);
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .input-field {
     width: 100%;
-    padding: 0.85rem 1rem;
-    font-size: 1rem;
-    line-height: var(--line-height-normal);
+    padding: var(--space-3) var(--space-4);
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
     color: var(--color-text-primary);
-    background-color: var(--color-surface);
+    background: var(--color-surface);
     border: 2px solid var(--color-border);
-    border-radius: var(--radius-md);
-    transition: border-color 150ms ease, box-shadow 150ms ease;
-    min-height: 48px;
-    font-family: inherit;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+}
+
+.input-field::placeholder {
+    color: var(--color-text-tertiary);
 }
 
 .input-field:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(11, 94, 215, 0.15);
-}
-
-.input-field:hover:not(:disabled):not(:focus) {
-    border-color: var(--color-primary);
-}
-
-.input-field::placeholder {
-    color: var(--color-text-muted);
-    opacity: 0.7;
+    box-shadow: 0 0 0 3px hsla(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l), 0.1);
 }
 
 .input-field:disabled {
-    background-color: var(--color-surface-secondary);
+    background: var(--color-bg-secondary);
     cursor: not-allowed;
     opacity: 0.6;
-    border-color: var(--color-border);
 }
 
-.input-error {
-    border-color: var(--color-error);
+/* Textarea */
+.input-textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: var(--line-height-relaxed);
 }
 
-.input-error:focus {
-    border-color: var(--color-error);
-    box-shadow: 0 0 0 3px rgba(217, 45, 32, 0.15);
+/* With Icons */
+.input-with-icon-left .input-field {
+    padding-left: 44px;
+}
+
+.input-with-icon-right .input-field {
+    padding-right: 44px;
+}
+
+.input-icon {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    color: var(--color-text-tertiary);
+    pointer-events: none;
+    transition: color var(--transition-base);
+}
+
+.input-icon-left {
+    left: var(--space-4);
+}
+
+.input-icon-right {
+    right: var(--space-4);
+}
+
+.input-focused .input-icon {
+    color: var(--color-primary);
+}
+
+/* Error State */
+.input-error .input-field {
+    border-color: var(--color-danger);
+}
+
+.input-error .input-field:focus {
+    box-shadow: 0 0 0 3px hsla(0, 72%, 55%, 0.1);
+}
+
+.input-error .input-icon {
+    color: var(--color-danger);
+}
+
+/* Footer */
+.input-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+}
+
+.input-message {
+    flex: 1;
 }
 
 .input-error-message {
-    font-size: var(--font-size-sm);
-    color: var(--color-error);
-    margin-top: 0.25rem;
-    font-weight: var(--font-weight-medium);
+    color: var(--color-danger);
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: var(--space-1);
 }
 
-.input-helper {
-    font-size: 0.95rem;
-    color: var(--color-text-secondary);
-    margin-top: 0.25rem;
-    line-height: var(--line-height-normal);
+.input-helper-text {
+    color: var(--color-text-tertiary);
 }
 
-/* Textarea специфічні стилі */
-textarea.input-field {
-    min-height: 100px;
-    resize: vertical;
-    font-family: inherit;
+.input-char-count {
+    color: var(--color-text-tertiary);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
 }
 
-/* Покращення для доступності - кращий контраст */
-@media (prefers-contrast: high) {
-    .input-field {
-        border-width: 2px;
-    }
-    
-    .input-field:focus {
-        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.3);
-    }
+/* Hover Effect */
+.input-field:hover:not(:disabled):not(:focus) {
+    border-color: var(--color-border-dark);
+}
+
+/* Disabled State */
+.input-disabled .input-field {
+    background: var(--color-bg-secondary);
+    cursor: not-allowed;
 }
