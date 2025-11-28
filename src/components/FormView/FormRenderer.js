@@ -4,7 +4,7 @@ import { Input, TextArea } from '../UI/Input';
 import { Button } from '../UI/Button';
 import './FormView.css';
 
-const FormRenderer = ({ currentForm, onSubmit }) => {
+const FormRenderer = ({ currentForm, onSubmit, guidedMode }) => {
     const [answers, setAnswers] = useState({});
     const [touched, setTouched] = useState({});
 
@@ -60,6 +60,17 @@ const FormRenderer = ({ currentForm, onSubmit }) => {
                 <div className="progress-bar-container">
                     <div className="progress-bar" style={{ width: `${progress}%` }}></div>
                 </div>
+
+                {guidedMode && (
+                    <div className="form-hint">
+                        <p className="hint-title">Як пройти опитування</p>
+                        <ul>
+                            <li>Зірочка означає обов’язкову відповідь.</li>
+                            <li>Якщо помилилися — можна виправити до відправлення.</li>
+                            <li>Натисніть «Відправити» після заповнення всіх полів.</li>
+                        </ul>
+                    </div>
+                )}
 
                 <div className="form-header">
                     <h1>{currentForm.title}</h1>

@@ -1,109 +1,11 @@
-.app {
-  position: relative;
+.site {
   min-height: 100vh;
-  z-index: 1;
-  background-color: var(--color-background);
-  transition: background-color var(--transition-normal);
+  background: var(--color-background);
+  color: var(--color-text-primary);
 }
 
-/* Декоративні розмиті елементи з адаптивністю */
-.blur {
-  position: fixed;
-  filter: blur(120px);
-  opacity: 0.15;
-  z-index: -1;
-  pointer-events: none;
-  border-radius: 50%;
-  transition: opacity var(--transition-normal);
-}
-
-@media (prefers-color-scheme: dark) {
-  .blur {
-    opacity: 0.25;
-  }
-}
-
-.blur-one {
-  width: 400px;
-  height: 400px;
-  background: var(--color-primary);
-  top: -100px;
-  left: -100px;
-  animation: float 10s infinite ease-in-out;
-}
-
-.blur-two {
-  width: 350px;
-  height: 350px;
-  background: var(--color-success);
-  right: -100px;
-  bottom: 50px;
-  animation: float 12s infinite ease-in-out reverse;
-}
-
-.blur-three {
-  width: 300px;
-  height: 300px;
-  background: var(--color-info);
-  top: 40%;
-  left: 30%;
-  opacity: 0.1;
-  animation: float 15s infinite ease-in-out 2s;
-}
-
-@keyframes float {
-  0% {
-    transform: translate(0, 0);
-  }
-
-  50% {
-    transform: translate(20px, 40px);
-  }
-
-  100% {
-    transform: translate(0, 0);
-  }
-}
-
-/* Вимкнення анімацій для користувачів, які вказали prefers-reduced-motion */
-@media (prefers-reduced-motion: reduce) {
-  .blur-one,
-  .blur-two,
-  .blur-three {
-    animation: none;
-  }
-  
-  .blur {
-    filter: blur(80px);
-    opacity: 0.08;
-  }
-}
-
-/* Адаптивність для мобільних */
-@media (max-width: 640px) {
-  .blur {
-    filter: blur(80px);
-    opacity: 0.1;
-  }
-
-  .blur-one {
-    width: 250px;
-    height: 250px;
-  }
-
-  .blur-two {
-    width: 200px;
-    height: 200px;
-  }
-
-  .blur-three {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .blur-one,
-  .blur-two {
-    display: none;
-  }
+.site-main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
 }

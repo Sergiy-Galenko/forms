@@ -1,148 +1,96 @@
 :root {
-  /* === СВІТЛА ТЕМА (за замовчуванням) === */
-  
-  /* Кольори - світла палітра */
-  --color-primary: #6366f1;
-  --color-primary-hover: #4f46e5;
-  --color-primary-light: #818cf8;
-  --color-secondary: #10b981;
-  --color-error: #ef4444;
-  --color-warning: #f59e0b;
-  --color-success: #10b981;
-  --color-info: #3b82f6;
-  
-  /* Фони */
-  --color-background: #ffffff;
+  --color-primary: #0b5ed7;
+  --color-primary-hover: #094ab2;
+  --color-primary-light: #e8f0fe;
+  --color-secondary: #6c757d;
+  --color-background: #f7f9fc;
   --color-surface: #ffffff;
-  --color-surface-secondary: #f8fafc;
-  --color-surface-hover: #f1f5f9;
-  
-  /* Текст */
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94a3b8;
+  --color-surface-secondary: #eef2f6;
+  --color-surface-hover: #e8ecf2;
+  --color-border: #dfe3e8;
+  --color-border-hover: #cbd2d9;
+  --color-text-primary: #1b262c;
+  --color-text-secondary: #52616b;
   --color-text-inverse: #ffffff;
-  
-  /* Границі */
-  --color-border: #e2e8f0;
-  --color-border-hover: #cbd5e1;
-  
-  /* Тіні */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  
-  /* Альтернативні назви для сумісності */
-  --bg: var(--color-background);
-  --text: var(--color-text-primary);
-  --muted: var(--color-text-muted);
-  --primary: var(--color-primary);
-  --primary-strong: var(--color-primary-hover);
-  --border: var(--color-border);
-  --panel: var(--color-surface-secondary);
-  --panel-strong: var(--color-surface-hover);
+  --color-error: #d92d20;
+
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-size-xs: 0.85rem;
+  --font-size-sm: 0.95rem;
+  --font-size-base: 18px;
+  --font-size-lg: 1.1rem;
+  --font-size-xl: 1.3rem;
+  --font-size-2xl: 1.6rem;
+  --font-size-3xl: 2rem;
+  --font-weight-medium: 600;
+  --font-weight-semibold: 700;
+  --font-weight-bold: 800;
+  --line-height-normal: 1.6;
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 0.75rem;
+  --spacing-lg: 1rem;
+  --spacing-xl: 1.5rem;
+  --spacing-2xl: 2rem;
+
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-2xl: 18px;
+  --radius-full: 999px;
+
+  --shadow-sm: 0 6px 16px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --shadow-2xl: 0 20px 60px rgba(0, 0, 0, 0.12);
+
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
 }
 
-/* === ТЕМНА ТЕМА (для користувачів з prefers-color-scheme: dark) === */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #0f172a;
-    --color-surface: #1e293b;
-    --color-surface-secondary: #334155;
-    --color-surface-hover: #475569;
-    
-    --color-text-primary: #f8fafc;
-    --color-text-secondary: #cbd5e1;
-    --color-text-muted: #94a3b8;
-    
-    --color-border: #334155;
-    --color-border-hover: #475569;
-    
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
-    
-    /* Альтернативні назви для темної теми */
-    --bg: var(--color-background);
-    --text: var(--color-text-primary);
-    --muted: var(--color-text-muted);
-    --panel: rgba(255, 255, 255, 0.05);
-    --panel-strong: rgba(255, 255, 255, 0.1);
-    --border: rgba(255, 255, 255, 0.1);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 
-/* === ТИПОГРАФІКА === */
-:root {
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --font-size-4xl: 2.25rem;
-  
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
-  
-  --line-height-tight: 1.25;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.75;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* === ВІДСТУПИ === */
-:root {
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  --spacing-3xl: 4rem;
+[data-theme="dark"] {
+  --color-primary: #5da2ff;
+  --color-primary-hover: #3b82f6;
+  --color-primary-light: #1c2a3a;
+  --color-secondary: #9aa5b1;
+  --color-background: #0d1117;
+  --color-surface: #111827;
+  --color-surface-secondary: #1f2933;
+  --color-surface-hover: #1b2530;
+  --color-border: #26323f;
+  --color-border-hover: #324253;
+  --color-text-primary: #e5e7eb;
+  --color-text-secondary: #cbd5e1;
+  --color-error: #f97066;
+  --shadow-sm: 0 6px 16px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-2xl: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
-/* === РАДІУСИ === */
-:root {
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --radius-full: 9999px;
-  
-  /* Альтернативна назва */
-  --radius: var(--radius-lg);
-}
-
-/* === АНІМАЦІЇ === */
-:root {
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* === БАЗОВІ СТИЛІ === */
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-*:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
 }
 
 body {
@@ -150,96 +98,68 @@ body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
-  background-color: var(--color-background);
+  background: var(--color-background);
   color: var(--color-text-primary);
-  min-height: 100vh;
-  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
-/* Покращена доступність - мінімальний контраст */
-a, button, input, select, textarea {
-  font-family: inherit;
-  font-size: inherit;
+a {
+  color: var(--color-primary);
+  text-decoration: none;
 }
 
-code {
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-  font-size: 0.9em;
+a:hover {
+  text-decoration: underline;
 }
 
-/* Покращення доступності для зображень */
-img {
-  max-width: 100%;
-  height: auto;
+main {
+  display: block;
 }
 
-/* === УТІЛІТИ === */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-md);
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
 }
 
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.flex {
-  display: flex;
-}
-
-.flex-col {
-  flex-direction: column;
-}
-
-.items-center {
+.btn {
+  display: inline-flex;
   align-items: center;
-}
-
-.justify-between {
-  justify-content: space-between;
-}
-
-.justify-center {
   justify-content: center;
+  padding: 0.85rem 1.35rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 1rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  min-height: 48px;
 }
 
-.gap-sm {
-  gap: var(--spacing-sm);
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
 }
 
-.gap-md {
-  gap: var(--spacing-md);
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
-.gap-lg {
-  gap: var(--spacing-lg);
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
 }
 
-.w-full {
-  width: 100%;
+.btn-secondary:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
-.h-full {
-  height: 100%;
-}
-
-/* === ДОСТУПНІСТЬ === */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Покращення для екранних читачів */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -248,6 +168,5 @@ img {
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+  border: 0;
 }

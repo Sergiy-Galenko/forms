@@ -79,6 +79,60 @@ const ShareSettings = ({ shareSettings, onUpdate }) => {
                     </div>
                 )}
             </label>
+
+            <label className="share-option">
+                <div className="share-option-main">
+                    <input
+                        type="checkbox"
+                        checked={!!shareSettings.expiresAt}
+                        onChange={(e) =>
+                            onUpdate({ expiresAt: e.target.checked ? new Date().toISOString().slice(0, 16) : '' })
+                        }
+                    />
+                    <span>Дата закінчення</span>
+                </div>
+                {!!shareSettings.expiresAt && (
+                    <div className="share-option-extra">
+                        <Input
+                            type="datetime-local"
+                            value={shareSettings.expiresAt}
+                            onChange={(e) =>
+                                onUpdate({ expiresAt: e.target.value })
+                            }
+                            className="share-option-input-wrapper"
+                        />
+                    </div>
+                )}
+            </label>
+
+            <label className="share-option">
+                <div className="share-option-main">
+                    <input
+                        type="checkbox"
+                        checked={shareSettings.showResults}
+                        onChange={(e) =>
+                            onUpdate({ showResults: e.target.checked })
+                        }
+                    />
+                    <span>Показувати результати після відповіді</span>
+                </div>
+            </label>
+
+            <label className="share-option">
+                <div className="share-option-main">
+                    <input
+                        type="checkbox"
+                        checked={shareSettings.oneResponsePerDevice}
+                        onChange={(e) =>
+                            onUpdate({ oneResponsePerDevice: e.target.checked })
+                        }
+                    />
+                    <span>Одна відповідь на пристрій</span>
+                </div>
+                <p className="share-option-description">
+                    Перевіряє IP-адресу та файли cookie для запобігання повторним відповідям.
+                </p>
+            </label>
         </div>
     );
 };

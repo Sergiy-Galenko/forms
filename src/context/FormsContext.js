@@ -9,7 +9,10 @@ const DEFAULT_SHARE_SETTINGS = {
   passwordEnabled: false,
   password: '',
   limitResponsesEnabled: false,
-  maxResponses: null
+  maxResponses: null,
+  expiresAt: '', // ISO date string
+  showResults: false,
+  oneResponsePerDevice: false
 };
 
 export const useForms = () => {
@@ -24,8 +27,6 @@ export const FormsProvider = ({ children }) => {
   const [forms, setForms] = useState(() => storageService.getForms());
   const [currentForm, setCurrentForm] = useState(null);
   const [view, setView] = useState('dashboard'); // dashboard, create, edit, view, stats
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   // Initialize from URL
   useEffect(() => {
@@ -43,17 +44,6 @@ export const FormsProvider = ({ children }) => {
       }
     }
   }, [forms]); // Added forms dependency to ensure it runs after initial load if needed
-
-  const saveForms = useCallback((newForms) => {
-    try {
-      setForms(newForms);
-      storageService.saveForms(newForms);
-      setError(null);
-    } catch (err) {
-      console.error('Failed to save forms:', err);
-      setError('Failed to save changes. Please try again.');
-    }
-  }, []);
 
   const createForm = useCallback((formData) => {
     const shareSettings = {
@@ -115,7 +105,19 @@ export const FormsProvider = ({ children }) => {
     }
   }, [currentForm]);
 
-  const addResponse = useCallback((formId, response) => {
+  const addResponse = useCallback(async (formId, response) => {
+    // Fetch IP if needed (best effort)
+    let clientIp = null;
+    try {
+      const ipRes = await fetch('https://api.ipify.org?format=json');
+      if (ipRes.ok) {
+        const data = await ipRes.json();
+        clientIp = data.ip;
+      }
+    } catch (e) {
+      console.warn('Failed to fetch client IP:', e);
+    }
+
     setForms(prevForms => {
       const form = prevForms.find(f => f.id === formId);
       if (!form) return prevForms;
@@ -123,7 +125,8 @@ export const FormsProvider = ({ children }) => {
       const newResponse = {
         id: Date.now().toString(),
         ...response,
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
+        ip: clientIp
       };
 
       const responses = [...form.responses, newResponse];
@@ -162,8 +165,6 @@ export const FormsProvider = ({ children }) => {
     forms,
     currentForm,
     view,
-    isLoading,
-    error,
     setView,
     setCurrentForm,
     createForm,

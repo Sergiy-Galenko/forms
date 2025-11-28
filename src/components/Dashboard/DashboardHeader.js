@@ -15,12 +15,9 @@ const DashboardHeader = ({
     return (
         <div className="dashboard-header">
             <div className="dashboard-header-main">
-                <h1>Мої опитування</h1>
+                <h1>Ваші опитування</h1>
                 <p className="subtitle">
-                    {formsCount} опитувань
-                    {filteredCount !== formsCount && (
-                        <span className="subtitle-filtered"> · відфільтровано {filteredCount}</span>
-                    )}
+                    {formsCount} всього · {filteredCount} у списку
                 </p>
             </div>
             <div className="dashboard-controls">
@@ -30,18 +27,37 @@ const DashboardHeader = ({
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Пошук за назвою або описом..."
                         className="dashboard-search-wrapper"
-                        style={{ minWidth: '260px' }}
                     />
-                    <select
-                        className="dashboard-select"
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
-                    >
-                        <option value="all">Всі статуси</option>
-                        <option value="active">Активні</option>
-                        <option value="draft">Чернетки</option>
-                        <option value="closed">Закриті</option>
-                    </select>
+                    <div className="status-pills" role="group" aria-label="Фільтр за статусом">
+                        <button
+                            type="button"
+                            className={`pill ${statusFilter === 'all' ? 'is-active' : ''}`}
+                            onClick={() => setStatusFilter('all')}
+                        >
+                            Усі
+                        </button>
+                        <button
+                            type="button"
+                            className={`pill ${statusFilter === 'active' ? 'is-active' : ''}`}
+                            onClick={() => setStatusFilter('active')}
+                        >
+                            Активні
+                        </button>
+                        <button
+                            type="button"
+                            className={`pill ${statusFilter === 'draft' ? 'is-active' : ''}`}
+                            onClick={() => setStatusFilter('draft')}
+                        >
+                            Чернетки
+                        </button>
+                        <button
+                            type="button"
+                            className={`pill ${statusFilter === 'closed' ? 'is-active' : ''}`}
+                            onClick={() => setStatusFilter('closed')}
+                        >
+                            Закриті
+                        </button>
+                    </div>
                 </div>
                 <Button variant="primary" onClick={onCreate}>
                     + Створити опитування

@@ -3,77 +3,69 @@ import { Input } from '../UI/Input';
 import { Button } from '../UI/Button';
 import './FormView.css';
 
-const FormAccessControl = ({
-    isPublicLink,
-    shareSettings,
-    limitReached,
-    currentForm,
-    onAuthorized
-}) => {
+const FormAccessControl = ({ state, onPasswordSubmit }) => {
     const [password, setPassword] = useState('');
-    const [passwordError, setPasswordError] = useState('');
 
-    if (isPublicLink && !shareSettings.isPublic) {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onPasswordSubmit(password);
+    };
+
+    if (state === 'password') {
         return (
-            <div className="form-view">
-                <div className="form-container">
-                    <div className="access-message">
-                        <h2>Опитування недоступне</h2>
-                        <p>Організатор вимкнув публічний доступ до цього опитування.</p>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    if (limitReached) {
-        return (
-            <div className="form-view">
-                <div className="form-container">
-                    <div className="access-message">
-                        <h2>Ліміт відповідей вичерпано</h2>
-                        <p>Це опитування вже набрало максимально дозволену кількість відповідей.</p>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="form-view">
-            <div className="form-container">
-                <div className="password-gate">
-                    <h1>{currentForm.title}</h1>
-                    <p className="form-description">Це опитування захищене паролем.</p>
-                    <form
-                        className="password-form"
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            if (!shareSettings.password) {
-                                setPasswordError('Пароль ще не налаштований організатором.');
-                                return;
-                            }
-                            if (password === shareSettings.password) {
-                                onAuthorized();
-                                setPasswordError('');
-                            } else {
-                                setPasswordError('Невірний пароль');
-                            }
-                        }}
-                    >
+            <div className="form-access-control">
+                <div className="access-card">
+                    <div className="access-icon">🔒</div>
+                    <h2>Цей опитування захищено паролем</h2>
+                    <p>Будь ласка, введіть пароль, щоб продовжити</p>
+                    <form onSubmit={handleSubmit}>
                         <Input
                             type="password"
-                            placeholder="Введіть пароль"
+                            placeholder="Пароль"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            error={passwordError}
-                            className="form-input-wrapper"
+                            className="access-input"
                         />
-                        <Button type="submit" variant="primary" fullWidth className="btn-submit">
-                            Продовжити
+                        <Button type="submit" variant="primary" fullWidth>
+                            Увійти
                         </Button>
                     </form>
                 </div>
+            </div>
+        );
+    }
+
+    let message = '';
+    let icon = '';
+
+    switch (state) {
+        case 'closed':
+            icon = '🔒';
+            message = 'Це опитування наразі закрите автором.';
+            break;
+        case 'limited':
+            icon = '✋';
+            message = 'Це опитування досягло ліміту відповідей.';
+            break;
+        case 'expired':
+            icon = '⏰';
+            message = 'Термін дії цього опитування закінчився.';
+            break;
+        case 'already_responded':
+            icon = '✅';
+            message = 'Ви вже пройшли це опитування.';
+            break;
+        default:
+            icon = '⚠️';
+            message = 'Доступ обмежено.';
+    }
+
+    return (
+        <div className="form-access-control">
+            <div className="access-card">
+                <div className="access-icon">{icon}</div>
+                <h2>Доступ обмежено</h2>
+                <p>{message}</p>
             </div>
         </div>
     );

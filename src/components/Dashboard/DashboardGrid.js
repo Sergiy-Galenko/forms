@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, CardHeader, CardBody, CardFooter, CardTitle, CardSubtitle } from '../UI/Card';
+import { Card, CardTitle, CardSubtitle } from '../UI/Card';
+import { Button } from '../UI/Button';
 import './Dashboard.css';
 
 const DashboardGrid = ({
@@ -17,68 +18,39 @@ const DashboardGrid = ({
                 <div className="empty-icon">🔍</div>
                 <h2>Нічого не знайдено</h2>
                 <p>Спробуйте змінити критерії пошуку або фільтри</p>
+                <Button variant="primary" onClick={onCreate}>+ Створити</Button>
             </div>
         );
     }
 
     return (
-        <div className="forms-grid">
+        <div className="forms-list">
             {forms.map((form) => (
-                <Card key={form.id} hoverable className="form-card">
-                    <div className="form-card-header">
+                <Card key={form.id} className="form-row">
+                    <div className="form-row-main">
                         <div>
                             <CardTitle>{form.title || 'Без назви'}</CardTitle>
                             <CardSubtitle className="form-meta">
                                 {form.status === 'active'
-                                    ? '🟢 Активне'
+                                    ? 'Активне'
                                     : form.status === 'closed'
-                                        ? '🔴 Закрите'
-                                        : '⚪ Чернетка'}
+                                        ? 'Закрите'
+                                        : 'Чернетка'}
                             </CardSubtitle>
+                            <p className="form-description">{form.description || 'Без опису'}</p>
                         </div>
-                        <div className="form-actions">
-                            <button
-                                className="btn-icon"
-                                onClick={() => onView(form)}
-                                title="Переглянути"
-                            >
-                                👁️
-                            </button>
-                            <button
-                                className="btn-icon"
-                                onClick={() => onEdit(form)}
-                                title="Редагувати"
-                            >
-                                ✏️
-                            </button>
-                            <button
-                                className="btn-icon"
-                                onClick={() => onStats(form)}
-                                title="Статистика"
-                            >
-                                📊
-                            </button>
-                            <button
-                                className="btn-icon"
-                                onClick={() => onShare(form)}
-                                title="Поділитися"
-                            >
-                                🔗
-                            </button>
-                            <button
-                                className="btn-icon danger"
-                                onClick={() => onDelete(form.id)}
-                                title="Видалити"
-                            >
-                                🗑️
-                            </button>
+                        <div className="form-stats">
+                            <span>Перегляди: {form.stats?.totalViews || 0}</span>
+                            <span>Відповіді: {form.stats?.totalResponses || 0}</span>
+                            <span>Завершення: {form.stats?.completionRate || 0}%</span>
                         </div>
                     </div>
-                    <p className="form-description">{form.description || 'Без опису'}</p>
-                    <div className="form-stats">
-                        <span>👁️ {form.stats?.totalViews || 0}</span>
-                        <span>✅ {form.stats?.totalResponses || 0}</span>
-                        <span>📈 {form.stats?.completionRate || 0}%</span>
+                    <div className="form-row-actions">
+                        <Button size="sm" variant="secondary" onClick={() => onView(form)}>Переглянути</Button>
+                        <Button size="sm" variant="secondary" onClick={() => onEdit(form)}>Редагувати</Button>
+                        <Button size="sm" variant="secondary" onClick={() => onStats(form)}>Статистика</Button>
+                        <Button size="sm" variant="secondary" onClick={() => onShare(form)}>Поділитися</Button>
+                        <Button size="sm" variant="danger" onClick={() => onDelete(form.id)}>Видалити</Button>
                     </div>
                 </Card>
             ))}

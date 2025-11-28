@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { useForms } from '../../context/FormsContext';
+import { useExperience } from '../../context/ExperienceContext';
 import ShareModal from '../ShareModal/ShareModal';
 import DashboardHeader from './DashboardHeader';
 import DashboardGrid from './DashboardGrid';
+import DashboardTemplates from './DashboardTemplates';
 import { Button } from '../UI/Button';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const { forms, setView, setCurrentForm, deleteForm } = useForms();
+  const { forms, setView, setCurrentForm, deleteForm, createForm } = useForms();
+  const { experience } = useExperience();
   const [shareForm, setShareForm] = useState(null);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -36,6 +39,27 @@ const Dashboard = () => {
     setShareForm(form);
   };
 
+  const handleUseTemplate = (template) => {
+    const templateQuestions = template.questions.map((question, index) => ({
+      ...question,
+      id: `${Date.now()}-${template.id}-${index}`
+    }));
+
+    const newForm = createForm({
+      title: template.title,
+      description: template.description,
+      questions: templateQuestions,
+      settings: {
+        allowAnonymous: true,
+        showProgress: true,
+        randomizeQuestions: false
+      }
+    });
+
+    setCurrentForm(newForm);
+    setView('edit');
+  };
+
   const filteredForms = forms.filter((form) => {
     const query = search.toLowerCase().trim();
     const matchesSearch = !query
@@ -61,26 +85,57 @@ const Dashboard = () => {
         onCreate={handleCreate}
       />
 
-      {forms.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon">📋</div>
-          <h2>Поки що немає опитувань</h2>
-          <p>Створіть перше опитування, щоб почати збирати відповіді</p>
-          <Button variant="primary" onClick={handleCreate}>
-            Створити опитування
-          </Button>
+      <div className="dashboard-two-col">
+        <div className="dashboard-main">
+          {experience.guidedMode && (
+            <div className="guided-panel" role="status">
+              <div className="guided-icon" aria-hidden="true">ℹ️</div>
+              <div>
+                <p className="guided-title">Як працювати зі списком</p>
+                <p className="guided-text">
+                  Спершу пошук або фільтр за статусом, далі великі кнопки «Переглянути», «Редагувати», «Статистика». Менше іконок — більше зрозумілого тексту.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {forms.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-icon">📋</div>
+              <h2>Поки що немає опитувань</h2>
+              <p>Створіть перше опитування, щоб почати збирати відповіді</p>
+              <Button variant="primary" onClick={handleCreate}>
+                Створити опитування
+              </Button>
+            </div>
+          ) : (
+            <DashboardGrid
+              forms={filteredForms}
+              onView={handleView}
+              onEdit={handleEdit}
+              onStats={handleStats}
+              onShare={handleShare}
+              onDelete={deleteForm}
+              onCreate={handleCreate}
+            />
+          )}
         </div>
-      ) : (
-        <DashboardGrid
-          forms={filteredForms}
-          onView={handleView}
-          onEdit={handleEdit}
-          onStats={handleStats}
-          onShare={handleShare}
-          onDelete={deleteForm}
-          onCreate={handleCreate}
-        />
-      )}
+
+        <aside className="dashboard-side">
+          <DashboardTemplates onUseTemplate={handleUseTemplate} />
+          <div className="side-help">
+            <h3>Швидкі дії</h3>
+            <ul>
+              <li>Створити нове опитування одним кліком.</li>
+              <li>Використати готовий шаблон зі списку.</li>
+              <li>Переглянути статистику за останніми відповідями.</li>
+            </ul>
+            <Button variant="secondary" onClick={handleCreate} fullWidth>
+              + Нова форма
+            </Button>
+          </div>
+        </aside>
+      </div>
 
       {shareForm && (
         <ShareModal
@@ -93,4 +148,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
