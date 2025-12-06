@@ -38,18 +38,21 @@ function App() {
         <ToastProvider>
           <ExperienceProvider>
             <FormsProvider>
-              <div className="site">
+              <div className="app-container">
                 <Header />
+                
                 <main className="site-main">
                   <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/help" element={<HelpPage />} />
-                    <Route path="/forms" element={<FormsArea />} />
+                    <Route path="/forms/*" element={<FormsArea />} />
                     <Route path="/form/:id" element={<FormsArea />} />
+                    <Route path="/form/new" element={<FormsArea />} />
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>
                 </main>
+                
                 <Footer />
               </div>
             </FormsProvider>
