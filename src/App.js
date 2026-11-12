@@ -1,31 +1,38 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { FormsProvider, useForms } from './context/FormsContext';
-import { ExperienceProvider } from './context/ExperienceContext';
-import { ThemeProvider } from './context/ThemeContext';
-import { ToastProvider } from './components/UI/Toast';
-import Dashboard from './components/Dashboard/Dashboard';
-import FormBuilder from './components/FormBuilder/FormBuilder';
-import FormView from './components/FormView/FormView';
-import Stats from './components/Stats/Stats';
-import Header from './components/Layout/Header';
-import Footer from './components/Layout/Footer';
-import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
-import HelpPage from './pages/HelpPage';
-import './App.css';
+import screens from "./styles/screens.module.css";
+import { lazy, Suspense } from "react";
+import AppLayout from "./layouts/AppLayout/AppLayout";
+import Skeleton from "./components/ui/Skeleton";
+import ErrorBoundary from "./components/ui/ErrorBoundary/ErrorBoundary";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { FormsProvider, useForms } from "./context/FormsContext";
+import { ExperienceProvider } from "./context/ExperienceContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import { ToastProvider } from "./components/ui/Toast";
+const Dashboard = lazy(() => import("./components/Dashboard/Dashboard"));
+const FormBuilder = lazy(() => import("./components/FormBuilder/FormBuilder"));
+const FormView = lazy(() => import("./components/FormView/FormView"));
+const Stats = lazy(() => import("./components/Stats/Stats"));
+const HomePage = lazy(() => import("./pages/HomePage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const HelpPage = lazy(() => import("./pages/HelpPage"));
 
 const FormsArea = () => {
   const { view } = useForms();
 
   switch (view) {
-    case 'create':
-    case 'edit':
+    case "create":
+    case "edit":
       return <FormBuilder />;
-    case 'view':
+    case "view":
       return <FormView />;
-    case 'stats':
+    case "stats":
       return <Stats />;
-    case 'dashboard':
+    case "dashboard":
     default:
       return <Dashboard />;
   }
@@ -38,20 +45,30 @@ function App() {
         <ToastProvider>
           <ExperienceProvider>
             <FormsProvider>
-              <div className="site">
-                <Header />
-                <main className="site-main">
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/help" element={<HelpPage />} />
-                    <Route path="/forms" element={<FormsArea />} />
-                    <Route path="/form/:id" element={<FormsArea />} />
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                  </Routes>
-                </main>
-                <Footer />
-              </div>
+              <AppLayout>
+                <ErrorBoundary>
+                  <Suspense
+                    fallback={
+                      <div
+                        className={screens["route-loading"]}
+                        role="status"
+                        aria-label="Завантаження"
+                      >
+                        <Skeleton count={4} />
+                      </div>
+                    }
+                  >
+                    <Routes>
+                      <Route path="/" element={<HomePage />} />
+                      <Route path="/about" element={<AboutPage />} />
+                      <Route path="/help" element={<HelpPage />} />
+                      <Route path="/forms" element={<FormsArea />} />
+                      <Route path="/form/:id" element={<FormsArea />} />
+                      <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                  </Suspense>
+                </ErrorBoundary>
+              </AppLayout>
             </FormsProvider>
           </ExperienceProvider>
         </ToastProvider>

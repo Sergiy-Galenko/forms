@@ -1,0 +1,33 @@
+.site {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+.main {
+  width: 100%;
+  max-width: 1200px;
+  flex: 1;
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 48px) max(24px, env(safe-area-inset-left));
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.skip {
+  position: fixed;
+  left: 16px;
+  top: 12px;
+  transform: translateY(-200%);
+  z-index: var(--z-tooltip);
+  padding: 12px 20px;
+  background: var(--primary);
+  color: var(--on-primary);
+  border-radius: 6px;
+}
+.skip:focus {
+  transform: translateY(0);
+}
+@media (max-width: 767px) {
+  .main {
+    padding: 24px max(16px, env(safe-area-inset-left));
+  }
+}

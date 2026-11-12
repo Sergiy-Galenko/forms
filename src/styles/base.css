@@ -1,0 +1,93 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 16px/1.5 var(--font-family);
+  -webkit-font-smoothing: antialiased;
+}
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  margin: 0 0 var(--space-4);
+}
+h1 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+}
+h2 {
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1.25rem;
+}
+p {
+  color: var(--text-muted);
+  margin: 0 0 var(--space-4);
+}
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+input,
+textarea,
+select {
+  max-width: 100%;
+  accent-color: var(--primary);
+}
+img,
+svg {
+  max-width: 100%;
+}
+svg {
+  flex-shrink: 0;
+}
+fieldset {
+  min-width: 0;
+}
+::selection {
+  background: var(--info-bg);
+}
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+html {
+  scroll-padding-top: 90px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0s;
+    transition-duration: 0s;
+    scroll-behavior: auto;
+  }
+}

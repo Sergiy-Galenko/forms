@@ -1,0 +1,48 @@
+.label {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-height: 44px;
+  font-size: 14px;
+}
+.label input {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--surface);
+  display: grid;
+  place-content: center;
+}
+.label input:checked {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.label input:checked:after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: var(--on-primary);
+  border-radius: 2px;
+}
+.label input[type="radio"] {
+  border-radius: 50%;
+}
+.label input[role="switch"] {
+  width: 36px;
+  border-radius: 20px;
+}
+.label input:disabled {
+  opacity: 0.5;
+}
+.hint,
+.error {
+  font-size: 12px;
+  margin: 4px 0;
+  color: var(--text-muted);
+}
+.error {
+  color: var(--danger);
+}

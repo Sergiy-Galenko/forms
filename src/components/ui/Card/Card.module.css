@@ -1,0 +1,29 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  min-width: 0;
+}
+.md {
+  padding: 24px;
+}
+.sm {
+  padding: 16px;
+}
+.lg {
+  padding: 32px;
+}
+.elevated {
+  box-shadow: var(--shadow-md);
+}
+.hoverable:hover {
+  border-color: var(--border-strong);
+}
+.header {
+  margin-bottom: 20px;
+}
+.footer {
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+  padding-top: 20px;
+}

@@ -1,0 +1,15 @@
+.item {
+  height: 24px;
+  background: var(--surface-2);
+  margin-bottom: 16px;
+  border-radius: 6px;
+  animation: pulse 1s ease-out infinite alternate;
+}
+.circle {
+  border-radius: 50%;
+}
+@keyframes pulse {
+  to {
+    opacity: 0.5;
+  }
+}

@@ -1,32 +1,31 @@
-import { useForms } from '../../context/FormsContext';
-import StatsSummary from './StatsSummary';
-import StatsChart from './StatsChart';
-import StatsResponses from './StatsResponses';
-import { Button } from '../UI/Button';
-import './Stats.css';
-
-import { getQuestionStats } from '../../utils/statsUtils';
-
+import screenStyles from "../../styles/screens.module.css";
+import { useForms } from "../../context/FormsContext";
+import StatsSummary from "./StatsSummary";
+import StatsChart from "./StatsChart";
+import StatsResponses from "./StatsResponses";
+import { Button } from "../ui/Button";
+import { getQuestionStats } from "../../utils/statsUtils";
+const cx = (value) =>
+  String(value || "")
+    .split(/\s+/)
+    .map((name) => screenStyles[name] || name)
+    .join(" ");
 const Stats = () => {
   const { currentForm, setView } = useForms();
-
   if (!currentForm) {
     return <div>Опитування не знайдено</div>;
   }
-
   const stats = currentForm.stats || {};
   const responses = currentForm.responses || [];
-
-
   return (
-    <div className="stats-page">
-      <div className="stats-header">
-        <Button variant="secondary" onClick={() => setView('dashboard')}>
+    <div className={cx("stats-page")}>
+      <div className={cx("stats-header")}>
+        <Button variant="secondary" onClick={() => setView("dashboard")}>
           ← Назад
         </Button>
         <div>
           <h1>{currentForm.title}</h1>
-          <p className="stats-subtitle">Статистика та аналітика</p>
+          <p className={cx("stats-subtitle")}>Статистика та аналітика</p>
         </div>
       </div>
 
@@ -38,13 +37,8 @@ const Stats = () => {
         responses={responses}
       />
 
-      <StatsResponses
-        responses={responses}
-        currentForm={currentForm}
-      />
+      <StatsResponses responses={responses} currentForm={currentForm} />
     </div>
   );
 };
-
 export default Stats;
-

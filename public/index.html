@@ -1,15 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uk">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="%PUBLIC_URL%/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#6366f1" />
-    <meta name="description" content="Створюйте та керуйте опитуваннями просто та зручно" />
+    <meta
+      name="theme-color"
+      content="#f7f8fa"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#12161e"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta
+      property="og:title"
+      content="FormsCraft — простір для хороших питань"
+    />
+    <meta
+      property="og:description"
+      content="Створюйте опитування та переглядайте відповіді. Без реєстрації, з локальним збереженням."
+    />
+    <meta property="og:type" content="website" />
+    <script>
+      (function () {
+        var t;
+        try {
+          t =
+            localStorage.getItem("formscraft:appearance:v1") ||
+            localStorage.getItem("theme");
+        } catch (e) {}
+        if (t !== "light" && t !== "dark")
+          t =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
+    <meta
+      name="description"
+      content="Створюйте та керуйте опитуваннями просто та зручно"
+    />
     <meta name="keywords" content="опитування, форми, збір даних, статистика" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/icon.svg" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>Опитування - Створення форм та збір відповідей</title>
+    <title>FormsCraft — форми та опитування</title>
   </head>
   <body>
     <noscript>Для роботи додатку необхідно увімкнути JavaScript.</noscript>

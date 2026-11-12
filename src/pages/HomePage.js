@@ -1,142 +1,97 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FiPlay } from '@react-icons/all-files/fi/FiPlay';
-import { FiZap } from '@react-icons/all-files/fi/FiZap';
-import { FiShield } from '@react-icons/all-files/fi/FiShield';
-import { FiTrendingUp } from '@react-icons/all-files/fi/FiTrendingUp';
-import { FiEye } from '@react-icons/all-files/fi/FiEye';
-import { FiEdit3 } from '@react-icons/all-files/fi/FiEdit3';
-import { FiBarChart2 } from '@react-icons/all-files/fi/FiBarChart2';
-import Button from '../components/UI/Button';
-import Card from '../components/UI/Card';
-import './Pages.css';
-
-const HomePage = () => {
+import { FiArrowRight } from "@react-icons/all-files/fi/FiArrowRight";
+import Button from "../components/ui/Button/Button";
+import s from "./HomePage.module.css";
+export default function HomePage() {
   return (
-    <div className="home-page">
-      {/* Hero Section */}
-      <section className="hero">
-        <div className="hero-content animate-fadeInUp">
-          <h1 className="hero-title">
-            Створюйте форми,<br />
-            які <span className="gradient-text">вражають</span>
+    <div>
+      <section className={s.hero}>
+        <div className={s.copy}>
+          <p className={s.eyebrow}>FORMSCRAFT · ПРОСТІР ДЛЯ ВАШИХ ПИТАНЬ</p>
+          <h1>
+            Хороші рішення
+            <br />
+            починаються
+            <br />з <span>хороших питань.</span>
           </h1>
-          <p className="hero-description">
-            Потужний конструктор форм та опитувань з сучасним дизайном.
-            Створюйте, діліться та аналізуйте відповіді за лічені хвилини.
+          <p className={s.intro}>
+            Від першого питання до зрозумілих відповідей. Створюйте опитування,
+            діліться ними й бачте головне.
           </p>
-          <div className="hero-actions">
-            <Link to="/forms">
-              <Button size="lg" icon={FiPlay} iconPosition="right">
-                Почати безкоштовно
-              </Button>
-            </Link>
-            <Link to="/about">
-              <Button variant="outline-primary" size="lg" icon={FiEye}>
-                Дізнатись більше
-              </Button>
-            </Link>
-          </div>
-          <p className="hero-note">
-            ✨ Без реєстрації • Необмежені форми • Зберігається локально
-          </p>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="features">
-        <div className="section-header">
-          <h2 className="section-title">Чому FormsCraft?</h2>
-          <p className="section-description">
-            Все, що потрібно для створення професійних форм
-          </p>
-        </div>
-
-        <div className="features-grid">
-          <Card hoverable glass className="feature-card">
-            <div className="feature-icon gradient-bg">
-              <FiZap />
-            </div>
-            <h3 className="feature-title">Швидке створення</h3>
-            <p className="feature-description">
-              Інтуїтивний конструктор дозволяє створювати форми
-              за лічені хвилини. Drag-and-drop, live preview та шаблони.
-            </p>
-          </Card>
-
-          <Card hoverable glass className="feature-card">
-            <div className="feature-icon gradient-bg">
-              <FiEdit3 />
-            </div>
-            <h3 className="feature-title">Потужний редактор</h3>
-            <p className="feature-description">
-              8 типів питань, умовна логіка, валідація даних,
-              налаштування доступу та багато іншого.
-            </p>
-          </Card>
-
-          <Card hoverable glass className="feature-card">
-            <div className="feature-icon gradient-bg">
-              <FiBarChart2 />
-            </div>
-            <h3 className="feature-title">Аналітика</h3>
-            <p className="feature-description">
-              Відстежуйте відповіді в реальному часі, переглядайте
-              статистику та експортуйте дані у CSV або JSON.
-            </p>
-          </Card>
-
-          <Card hoverable glass className="feature-card">
-            <div className="feature-icon gradient-bg">
-              <FiShield />
-            </div>
-            <h3 className="feature-title">Приватність</h3>
-            <p className="feature-description">
-              Всі дані зберігаються локально у вашому браузері.
-              Ніякі дані не передаються на сервери.
-            </p>
-          </Card>
-
-          <Card hoverable glass className="feature-card">
-            <div className="feature-icon gradient-bg">
-              <FiTrendingUp />
-            </div>
-            <h3 className="feature-title">Адаптивний дизайн</h3>
-            <p className="feature-description">
-              Ваші форми чудово виглядають на будь-яких пристроях -
-              від смартфонів до великих моніторів.
-            </p>
-          </Card>
-
-          <Card hoverable glass className="feature-card">
-            <div className="feature-icon gradient-bg">
-              <FiEye />
-            </div>
-            <h3 className="feature-title">Сучасний UI</h3>
-            <p className="feature-description">
-              Glassmorphism, темна тема, плавні анімації та
-              інтуїтивний інтерфейс для найкращого UX.
-            </p>
-          </Card>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="cta">
-        <Card glass className="cta-card">
-          <h2 className="cta-title">Готові почати?</h2>
-          <p className="cta-description">
-            Приєднуйтесь до тисяч користувачів, які вже створили свої форми
-          </p>
-          <Link to="/forms">
-            <Button size="lg" icon={FiPlay} iconPosition="right">
-              Створити першу форму
+          <div className={s.actions}>
+            <Button
+              to="/forms"
+              iconRight={<FiArrowRight aria-hidden="true" />}
+              size="lg"
+            >
+              Створити форму
             </Button>
-          </Link>
-        </Card>
+            <Button to="/about" variant="ghost">
+              Про FormsCraft
+            </Button>
+          </div>
+          <p className={s.note}>
+            Без реєстрації. Ваші дані — у вашому браузері.
+          </p>
+        </div>
+        <div className={s.preview} aria-label="Приклад оформлення опитування">
+          <div className={s.previewTop}>
+            <span>ПРИКЛАД ФОРМИ</span>
+            <span>01 / 03</span>
+          </div>
+          <div className={s.rule} />
+          <p className={s.category}>ЗВОРОТНИЙ ЗВ’ЯЗОК</p>
+          <h2>
+            Ваша думка
+            <br />
+            має значення.
+          </h2>
+          <p>Кілька питань, щоб наступного разу стати кращими.</p>
+          <div className={s.question}>
+            <span>01</span>
+            <h3>Що вам сподобалося найбільше?</h3>
+          </div>
+          <div className={s.answer}>Поділіться враженнями…</div>
+          <div className={s.previewBottom}>
+            <span>Приклад короткої відповіді</span>
+            <FiArrowRight aria-hidden="true" />
+          </div>
+        </div>
+      </section>
+      <section className={s.workflow}>
+        <div>
+          <p className={s.eyebrow}>ВІД ІДЕЇ ДО ВІДПОВІДЕЙ</p>
+          <h2>
+            Менше налаштувань.
+            <br />
+            Більше змісту.
+          </h2>
+        </div>
+        <ol>
+          <li>
+            <span>01</span>
+            <div>
+              <h3>Сформулюйте питання</h3>
+              <p>
+                Вісім типів полів: від короткої відповіді до шкали оцінювання.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <h3>Підготуйте форму</h3>
+              <p>Додайте опис і налаштуйте доступ для респондентів.</p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <h3>Побачте результат</h3>
+              <p>Переглядайте відповіді та статистику в одному місці.</p>
+            </div>
+          </li>
+        </ol>
       </section>
     </div>
   );
-};
-
-export default HomePage;
+}

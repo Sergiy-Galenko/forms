@@ -1,21 +1,26 @@
-import React from 'react';
-import './Pages.css';
-
+import screenStyles from "../styles/screens.module.css";
+import React from "react";
+const cx = (value) =>
+  String(value || "")
+    .split(/\s+/)
+    .map((name) => screenStyles[name] || name)
+    .join(" ");
 const AboutPage = () => {
   return (
-    <div className="about-page">
+    <div className={cx("about-page")}>
       <h1>Про FormsCraft</h1>
 
-      <div className="help-section">
+      <div className={cx("help-section")}>
         <h2>Наша місія</h2>
         <p>
-          FormsCraft створений для того, щоб зробити процес створення опитувань та форм
-          простим, швидким та приємним. Ми віримо, що кожен повинен мати доступ до
-          потужних інструментів без необхідності реєстрації або оплати.
+          FormsCraft створений для того, щоб зробити процес створення опитувань
+          та форм простим, швидким та приємним. Ми віримо, що кожен повинен мати
+          доступ до потужних інструментів без необхідності реєстрації або
+          оплати.
         </p>
       </div>
 
-      <div className="help-section">
+      <div className={cx("help-section")}>
         <h2>Переваги FormsCraft</h2>
         <ul>
           <li>Безкоштовно та без реєстрації</li>
@@ -27,15 +32,14 @@ const AboutPage = () => {
         </ul>
       </div>
 
-      <div className="help-section">
+      <div className={cx("help-section")}>
         <h2>Технології</h2>
         <p>
-          FormsCraft побудований з використанням сучасних веб-технологій:
-          React, React Router, та LocalStorage API для зберігання даних.
+          FormsCraft побудований з використанням сучасних веб-технологій: React,
+          React Router, та LocalStorage API для зберігання даних.
         </p>
       </div>
     </div>
   );
 };
-
 export default AboutPage;

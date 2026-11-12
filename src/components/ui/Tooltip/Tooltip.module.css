@@ -1,0 +1,22 @@
+.wrap {
+  position: relative;
+  display: inline-flex;
+}
+.tip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  z-index: var(--z-tooltip);
+  background: var(--text);
+  color: var(--bg);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  width: max-content;
+  max-width: 240px;
+}
+.wrap:hover .tip,
+.wrap:focus-within .tip {
+  display: block;
+}

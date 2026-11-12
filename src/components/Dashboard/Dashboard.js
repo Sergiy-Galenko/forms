@@ -1,78 +1,70 @@
-import React, { useState, useMemo } from 'react';
-import { FiPlus } from '@react-icons/all-files/fi/FiPlus';
-import { FiSearch } from '@react-icons/all-files/fi/FiSearch';
-import { FiGrid } from '@react-icons/all-files/fi/FiGrid';
-import { useForms } from '../../context/FormsContext';
-import { useDebounce } from '../../hooks/useDebounce';
-import Button from '../UI/Button';
-import Input from '../UI/Input';
-import Card from '../UI/Card';
-import FormCard from './FormCard';
-import { FORM_STATUS } from '../../types';
-import './Dashboard.css';
-
+import screenStyles from "../../styles/screens.module.css";
+import React, { useState, useMemo } from "react";
+import { FiPlus } from "@react-icons/all-files/fi/FiPlus";
+import { FiSearch } from "@react-icons/all-files/fi/FiSearch";
+import { FiGrid } from "@react-icons/all-files/fi/FiGrid";
+import { useForms } from "../../context/FormsContext";
+import { useDebounce } from "../../hooks/useDebounce";
+import Button from "../ui/Button";
+import Input from "../ui/Input";
+import Card from "../ui/Card";
+import FormCard from "./FormCard";
+import { FORM_STATUS } from "../../types";
+const cx = (value) =>
+  String(value || "")
+    .split(/\s+/)
+    .map((name) => screenStyles[name] || name)
+    .join(" ");
 const Dashboard = () => {
   const { forms, setView } = useForms();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [sortBy, setSortBy] = useState('date'); // date, responses, name
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("date");
   const debouncedSearch = useDebounce(searchTerm, 300);
-
   const handleCreateForm = () => {
-    setView('create');
+    setView("create");
   };
-
-  // Filter and sort forms
   const filteredForms = useMemo(() => {
     let result = [...forms];
-
-    // Search filter
     if (debouncedSearch) {
       const term = debouncedSearch.toLowerCase();
-      result = result.filter(form =>
-        form.title?.toLowerCase().includes(term) ||
-        form.description?.toLowerCase().includes(term)
+      result = result.filter(
+        (form) =>
+          form.title?.toLowerCase().includes(term) ||
+          form.description?.toLowerCase().includes(term),
       );
     }
-
-    // Status filter
-    if (statusFilter !== 'all') {
-      result = result.filter(form => form.status === statusFilter);
+    if (statusFilter !== "all") {
+      result = result.filter((form) => form.status === statusFilter);
     }
-
-    // Sort
     result.sort((a, b) => {
       switch (sortBy) {
-        case 'name':
-          return (a.title || '').localeCompare(b.title || '');
-        case 'responses':
+        case "name":
+          return (a.title || "").localeCompare(b.title || "");
+        case "responses":
           return (b.responses?.length || 0) - (a.responses?.length || 0);
-        case 'date':
+        case "date":
         default:
           return new Date(b.createdAt) - new Date(a.createdAt);
       }
     });
-
     return result;
   }, [forms, debouncedSearch, statusFilter, sortBy]);
-
   const stats = useMemo(() => {
     return {
       total: forms.length,
-      active: forms.filter(f => f.status === FORM_STATUS.ACTIVE).length,
-      draft: forms.filter(f => f.status === FORM_STATUS.DRAFT).length,
-      responses: forms.reduce((sum, f) => sum + (f.responses?.length || 0), 0)
+      active: forms.filter((f) => f.status === FORM_STATUS.ACTIVE).length,
+      draft: forms.filter((f) => f.status === FORM_STATUS.DRAFT).length,
+      responses: forms.reduce((sum, f) => sum + (f.responses?.length || 0), 0),
     };
   }, [forms]);
-
   return (
-    <div className="dashboard">
-      {/* Header */}
-      <div className="dashboard-header">
+    <div className={cx("dashboard")}>
+      {}
+      <div className={cx("dashboard-header")}>
         <div>
-          <h1 className="dashboard-title">Мої форми</h1>
-          <p className="dashboard-subtitle">
+          <h1 className={cx("dashboard-title")}>Мої форми</h1>
+          <p className={cx("dashboard-subtitle")}>
             Створюйте, керуйте та аналізуйте свої форми
           </p>
         </div>
@@ -81,30 +73,31 @@ const Dashboard = () => {
         </Button>
       </div>
 
-      {/* Stats */}
-      <div className="dashboard-stats">
-        <Card className="stat-card">
-          <div className="stat-value">{stats.total}</div>
-          <div className="stat-label">Всього форм</div>
+      {}
+      <div className={cx("dashboard-stats")}>
+        <Card className={cx("stat-card")}>
+          <div className={cx("stat-value")}>{stats.total}</div>
+          <div className={cx("stat-label")}>Всього форм</div>
         </Card>
-        <Card className="stat-card">
-          <div className="stat-value">{stats.active}</div>
-          <div className="stat-label">Активні</div>
+        <Card className={cx("stat-card")}>
+          <div className={cx("stat-value")}>{stats.active}</div>
+          <div className={cx("stat-label")}>Активні</div>
         </Card>
-        <Card className="stat-card">
-          <div className="stat-value">{stats.draft}</div>
-          <div className="stat-label">Чернетки</div>
+        <Card className={cx("stat-card")}>
+          <div className={cx("stat-value")}>{stats.draft}</div>
+          <div className={cx("stat-label")}>Чернетки</div>
         </Card>
-        <Card className="stat-card">
-          <div className="stat-value">{stats.responses}</div>
-          <div className="stat-label">Відповіді</div>
+        <Card className={cx("stat-card")}>
+          <div className={cx("stat-value")}>{stats.responses}</div>
+          <div className={cx("stat-label")}>Відповіді</div>
         </Card>
       </div>
 
-      {/* Filters and Search */}
-      <div className="dashboard-controls">
-        <div className="dashboard-search">
+      {}
+      <div className={cx("dashboard-controls")}>
+        <div className={cx("dashboard-search")}>
           <Input
+            label="Пошук форм..."
             placeholder="Пошук форм..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -112,9 +105,10 @@ const Dashboard = () => {
           />
         </div>
 
-        <div className="dashboard-filters">
+        <div className={cx("dashboard-filters")}>
           <select
-            className="filter-select"
+            aria-label="Фільтр за статусом"
+            className={cx("filter-select")}
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -125,7 +119,8 @@ const Dashboard = () => {
           </select>
 
           <select
-            className="filter-select"
+            aria-label="Сортування форм"
+            className={cx("filter-select")}
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
           >
@@ -136,27 +131,27 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Forms Grid */}
+      {}
       {filteredForms.length > 0 ? (
-        <div className="dashboard-grid">
+        <div className={cx("dashboard-grid")}>
           {filteredForms.map((form) => (
             <FormCard key={form.id} form={form} />
           ))}
         </div>
       ) : (
-        <Card glass className="empty-state">
-          <FiGrid className="empty-icon" />
-          <h3 className="empty-title">
-            {debouncedSearch || statusFilter !== 'all'
-              ? 'Нічого не знайдено'
-              : 'У вас ще немає форм'}
-          </h3>
-          <p className="empty-description">
-            {debouncedSearch || statusFilter !== 'all'
-              ? 'Спробуйте змінити параметри фільтрування'
-              : 'Створіть свою першу форму, щоб почати збирати відповіді'}
+        <Card glass className={cx("empty-state")}>
+          <FiGrid className={cx("empty-icon")} />
+          <h2 className={cx("empty-title")}>
+            {debouncedSearch || statusFilter !== "all"
+              ? "Нічого не знайдено"
+              : "У вас ще немає форм"}
+          </h2>
+          <p className={cx("empty-description")}>
+            {debouncedSearch || statusFilter !== "all"
+              ? "Спробуйте змінити параметри фільтрування"
+              : "Створіть свою першу форму, щоб почати збирати відповіді"}
           </p>
-          {!debouncedSearch && statusFilter === 'all' && (
+          {!debouncedSearch && statusFilter === "all" && (
             <Button icon={FiPlus} onClick={handleCreateForm}>
               Створити першу форму
             </Button>
@@ -166,5 +161,4 @@ const Dashboard = () => {
     </div>
   );
 };
-
 export default Dashboard;

@@ -1,0 +1,13 @@
+.empty {
+  text-align: center;
+  padding: 48px 20px;
+}
+.empty > svg {
+  width: 32px;
+  height: 32px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+.empty h2 {
+  font-size: 20px;
+}

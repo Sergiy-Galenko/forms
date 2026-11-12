@@ -1,75 +1,85 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { FiSun } from '@react-icons/all-files/fi/FiSun';
-import { FiMoon } from '@react-icons/all-files/fi/FiMoon';
-import { FiMenu } from '@react-icons/all-files/fi/FiMenu';
-import { FiX } from '@react-icons/all-files/fi/FiX';
-import { FiFileText } from '@react-icons/all-files/fi/FiFileText';
-import { useTheme } from '../../context/ThemeContext';
-import './Header.css';
-
-const Header = () => {
-  const { theme, toggleTheme } = useTheme();
-  const location = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
-  const closeMobileMenu = () => setMobileMenuOpen(false);
-
-  const isActive = (path) => location.pathname === path;
-
+import { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { FiFileText } from "@react-icons/all-files/fi/FiFileText";
+import { FiMoon } from "@react-icons/all-files/fi/FiMoon";
+import { FiSun } from "@react-icons/all-files/fi/FiSun";
+import { FiMenu } from "@react-icons/all-files/fi/FiMenu";
+import { useTheme } from "../../context/ThemeContext";
+import Modal from "../ui/Modal/Modal";
+import s from "./Header.module.css";
+const links = [
+  ["/forms", "Мої форми"],
+  ["/about", "Про нас"],
+  ["/help", "Допомога"],
+];
+function Navigation({ close }) {
   return (
-    <header className="header glass">
-      <div className="header-container">
-        <Link to="/" className="header-logo" onClick={closeMobileMenu}>
-          <FiFileText className="logo-icon" />
-          <span className="logo-text gradient-text">FormsCraft</span>
+    <nav aria-label="Основна навігація" className={s.nav}>
+      {links.map(([url, label]) => (
+        <NavLink
+          to={url}
+          key={url}
+          onClick={close}
+          className={({ isActive }) => (isActive ? s.active : undefined)}
+        >
+          {label}
+        </NavLink>
+      ))}
+    </nav>
+  );
+}
+export default function Header() {
+  const { theme, toggleTheme } = useTheme();
+  const [open, setOpen] = useState(false);
+  return (
+    <header className={s.header}>
+      <div className={s.container}>
+        <Link to="/" className={s.logo}>
+          <span>
+            <FiFileText aria-hidden="true" />
+          </span>
+          FormsCraft<span className={s.wordmark}>/</span>
         </Link>
-
-        <nav className={`header-nav ${mobileMenuOpen ? 'header-nav-open' : ''}`}>
-          <Link
-            to="/forms"
-            className={`nav-link ${isActive('/forms') ? 'nav-link-active' : ''}`}
-            onClick={closeMobileMenu}
-          >
-            Мої форми
-          </Link>
-          <Link
-            to="/about"
-            className={`nav-link ${isActive('/about') ? 'nav-link-active' : ''}`}
-            onClick={closeMobileMenu}
-          >
-            Про нас
-          </Link>
-          <Link
-            to="/help"
-            className={`nav-link ${isActive('/help') ? 'nav-link-active' : ''}`}
-            onClick={closeMobileMenu}
-          >
-            Допомога
-          </Link>
-        </nav>
-
-        <div className="header-actions">
+        <div className={s.desktop}>
+          <Navigation />
+        </div>
+        <div className={s.actions}>
           <button
-            className="theme-toggle"
+            type="button"
+            className={s.icon}
             onClick={toggleTheme}
-            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            aria-label={
+              theme === "light"
+                ? "Увімкнути темну тему"
+                : "Увімкнути світлу тему"
+            }
           >
-            {theme === 'light' ? <FiMoon /> : <FiSun />}
+            {theme === "light" ? (
+              <FiMoon aria-hidden="true" />
+            ) : (
+              <FiSun aria-hidden="true" />
+            )}
           </button>
-
           <button
-            className="mobile-menu-toggle"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle menu"
+            type="button"
+            className={`${s.icon} ${s.menu}`}
+            onClick={() => setOpen(true)}
+            aria-label="Відкрити меню"
+            aria-expanded={open}
+            aria-haspopup="dialog"
           >
-            {mobileMenuOpen ? <FiX /> : <FiMenu />}
+            <FiMenu aria-hidden="true" />
           </button>
         </div>
       </div>
+      <Modal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        title="Навігація"
+        size="sm"
+      >
+        <Navigation close={() => setOpen(false)} />
+      </Modal>
     </header>
   );
-};
-
-export default Header;
+}

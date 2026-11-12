@@ -1,55 +1,52 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-
+import { createContext, useContext, useEffect, useState } from "react";
 const ThemeContext = createContext();
-
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
-  }
-  return context;
-};
-
-export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    // Check localStorage first
-    const saved = localStorage.getItem('theme');
-    if (saved) return saved;
-
-    // Check system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
-
-    return 'light';
-  });
-
+export const THEME_KEY = "formscraft:appearance:v1";
+export const useTheme = () => useContext(ThemeContext);
+function preference() {
+  try {
+    const saved =
+      localStorage.getItem(THEME_KEY) || localStorage.getItem("theme");
+    if (saved === "light" || saved === "dark") return saved;
+  } catch {}
+  return null;
+}
+const system = () =>
+  window.matchMedia?.("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+export function ThemeProvider({ children }) {
+  const [choice, setChoice] = useState(preference);
+  const [systemTheme, setSystemTheme] = useState(system);
+  const theme = choice || systemTheme;
   useEffect(() => {
-    // Apply theme to document
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
+    const media = window.matchMedia?.("(prefers-color-scheme: dark)");
+    const change = () => setSystemTheme(system());
+    media?.addEventListener?.("change", change);
+    return () => media?.removeEventListener?.("change", change);
+  }, []);
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
   }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  const setTheme = (value) => {
+    setChoice(value);
+    try {
+      if (value) localStorage.setItem(THEME_KEY, value);
+      else localStorage.removeItem(THEME_KEY);
+    } catch {}
   };
-
-  const setLightTheme = () => setTheme('light');
-  const setDarkTheme = () => setTheme('dark');
-
-  const value = {
-    theme,
-    setTheme,
-    toggleTheme,
-    setLightTheme,
-    setDarkTheme,
-    isDark: theme === 'dark',
-    isLight: theme === 'light'
-  };
-
   return (
-    <ThemeContext.Provider value={value}>
+    <ThemeContext.Provider
+      value={{
+        theme,
+        setTheme,
+        toggleTheme: () => setTheme(theme === "light" ? "dark" : "light"),
+        setLightTheme: () => setTheme("light"),
+        setDarkTheme: () => setTheme("dark"),
+        isDark: theme === "dark",
+        isLight: theme === "light",
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );
-};
+}

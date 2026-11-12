@@ -1,7 +1,0 @@
-.App {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Remove default app CSS as we're using index.css */

@@ -1,0 +1,96 @@
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+  text-decoration: none;
+  white-space: normal;
+  transition: transform var(--transition-fast);
+}
+.button:hover {
+  text-decoration: none;
+}
+.button:active {
+  transform: translateY(1px);
+}
+.button:disabled,
+.button[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.primary:hover {
+  background: var(--primary-hover);
+}
+.primary:active {
+  background: var(--primary-active);
+}
+.secondary,
+.outline-primary {
+  background: var(--surface);
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+.ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+.ghost:hover,
+.secondary:hover {
+  background: var(--surface-2);
+}
+.danger {
+  background: var(--danger);
+  color: var(--surface);
+}
+.sm {
+  padding: 8px 12px;
+  min-height: 40px;
+}
+.lg {
+  padding: 14px 22px;
+  min-height: 48px;
+}
+.full {
+  width: 100%;
+}
+.content,
+.hidden {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.content svg,
+.hidden svg {
+  width: 18px;
+  height: 18px;
+}
+.hidden {
+  visibility: hidden;
+}
+.loader {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: turn 0.8s linear infinite;
+}
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
