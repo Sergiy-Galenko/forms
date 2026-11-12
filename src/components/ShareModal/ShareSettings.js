@@ -80,6 +80,7 @@ const ShareSettings = ({ shareSettings, onUpdate }) => {
               label="Наприклад, 100"
               type="number"
               min="1"
+              max="5000"
               placeholder="Наприклад, 100"
               value={shareSettings.maxResponses}
               onChange={(e) => {
@@ -102,7 +103,7 @@ const ShareSettings = ({ shareSettings, onUpdate }) => {
             onChange={(e) =>
               onUpdate({
                 expiresAt: e.target.checked
-                  ? new Date().toISOString().slice(0, 16)
+                  ? new Date(Date.now() + 86400000).toISOString()
                   : "",
               })
             }
@@ -112,12 +113,24 @@ const ShareSettings = ({ shareSettings, onUpdate }) => {
         {!!shareSettings.expiresAt && (
           <div className={cx("share-option-extra")}>
             <Input
-              label="Налаштування доступу"
+              label="Доступний до (ваш місцевий час)"
               type="datetime-local"
-              value={shareSettings.expiresAt}
+              value={
+                shareSettings.expiresAt
+                  ? new Date(
+                      new Date(shareSettings.expiresAt).getTime() -
+                        new Date(shareSettings.expiresAt).getTimezoneOffset() *
+                          60000,
+                    )
+                      .toISOString()
+                      .slice(0, 16)
+                  : ""
+              }
               onChange={(e) =>
                 onUpdate({
-                  expiresAt: e.target.value,
+                  expiresAt: e.target.value
+                    ? new Date(e.target.value).toISOString()
+                    : "",
                 })
               }
               className={cx("share-option-input-wrapper")}
@@ -130,7 +143,7 @@ const ShareSettings = ({ shareSettings, onUpdate }) => {
         <label className={cx("share-option-main")}>
           <input
             type="checkbox"
-            checked={shareSettings.showResults}
+            checked={!!shareSettings.showResults}
             onChange={(e) =>
               onUpdate({
                 showResults: e.target.checked,
@@ -145,7 +158,7 @@ const ShareSettings = ({ shareSettings, onUpdate }) => {
         <label className={cx("share-option-main")}>
           <input
             type="checkbox"
-            checked={shareSettings.oneResponsePerDevice}
+            checked={!!shareSettings.oneResponsePerDevice}
             onChange={(e) =>
               onUpdate({
                 oneResponsePerDevice: e.target.checked,
@@ -155,8 +168,8 @@ const ShareSettings = ({ shareSettings, onUpdate }) => {
           <span>Одна відповідь на пристрій</span>
         </label>
         <p className={cx("share-option-description")}>
-          Перевіряє IP-адресу та файли cookie для запобігання повторним
-          відповідям.
+          Обмежує повторне проходження в цьому браузері через cookie. Інший
+          браузер або очищення cookie дозволяє нову спробу.
         </p>
       </div>
     </div>

@@ -54,3 +54,16 @@
   padding: 20px 24px;
   border-top: 1px solid var(--border);
 }
+.dialog {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.header,
+.footer {
+  flex-shrink: 0;
+}
+.body {
+  overflow-y: auto;
+  min-height: 0;
+}

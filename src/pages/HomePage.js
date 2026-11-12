@@ -30,7 +30,7 @@ export default function HomePage() {
             </Button>
           </div>
           <p className={s.note}>
-            Без реєстрації. Ваші дані — у вашому браузері.
+            Без реєстрації. Чернетки — у браузері, готові тести — за посиланням.
           </p>
         </div>
         <div className={s.preview} aria-label="Приклад оформлення опитування">

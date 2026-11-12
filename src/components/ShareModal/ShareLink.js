@@ -9,14 +9,22 @@ const cx = (value) =>
     .join(" ");
 const ShareLink = ({ shareUrl }) => {
   const [copied, setCopied] = useState(false);
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(shareUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const [error, setError] = useState("");
+  const copyToClipboard = async () => {
+    setError("");
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setError(
+        "Не вдалося скопіювати. Виділіть посилання та скопіюйте вручну.",
+      );
+    }
   };
   return (
     <div className={cx("share-url-section")}>
-      <label>Посилання для опитування</label>
+      <p>Посилання для учасників</p>
       <div className={cx("url-input-group")}>
         <Input
           label="Посилання на форму"
@@ -28,6 +36,7 @@ const ShareLink = ({ shareUrl }) => {
           {copied ? "✓ Скопійовано" : "Копіювати"}
         </Button>
       </div>
+      {error && <p role="alert">{error}</p>}
     </div>
   );
 };

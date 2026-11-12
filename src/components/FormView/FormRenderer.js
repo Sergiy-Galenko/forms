@@ -3,22 +3,28 @@ import Button from "../ui/Button";
 import ProgressBar from "../ui/ProgressBar/ProgressBar";
 import QuestionAnswer from "./QuestionAnswer";
 import styles from "../../styles/screens.module.css";
+const isEmptyAnswer = (value) =>
+  value === undefined ||
+  value === null ||
+  (typeof value === "string" && !value.trim()) ||
+  (Array.isArray(value) && value.length === 0);
 export default function FormRenderer({ currentForm, onSubmit, guidedMode }) {
   const [answers, setAnswers] = useState({});
   const [touched, setTouched] = useState({});
   const [summary, setSummary] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const handleAnswer = (id, value) =>
+  const [serverErrors, setServerErrors] = useState({});
+  const handleAnswer = (id, value) => {
+    setServerErrors((prev) => ({ ...prev, [id]: null }));
     setAnswers((prev) => ({ ...prev, [id]: value }));
+  };
   const handleBlur = (id) => setTouched((prev) => ({ ...prev, [id]: true }));
-  const missingAnswer = (question) =>
-    !answers[question.id] ||
-    (Array.isArray(answers[question.id]) && answers[question.id].length === 0);
+  const missingAnswer = (question) => isEmptyAnswer(answers[question.id]);
   const progress = useMemo(() => {
     if (!currentForm.questions.length) return 0;
     const count = currentForm.questions.filter((q) => {
       const answer = answers[q.id];
-      return answer && (!Array.isArray(answer) || answer.length > 0);
+      return !isEmptyAnswer(answer);
     }).length;
     return Math.round((count / currentForm.questions.length) * 100);
   }, [currentForm.questions, answers]);
@@ -43,8 +49,25 @@ export default function FormRenderer({ currentForm, onSubmit, guidedMode }) {
     setSubmitting(true);
     try {
       await onSubmit(answers);
-    } catch {
-      setSummary("Не вдалося відправити відповідь. Спробуйте ще раз.");
+    } catch (error) {
+      if (error.fields?.length) {
+        setServerErrors(
+          Object.fromEntries(
+            error.fields.map((id) => [id, "Перевірте відповідь у цьому полі."]),
+          ),
+        );
+        setTouched((prev) => ({
+          ...prev,
+          ...Object.fromEntries(error.fields.map((id) => [id, true])),
+        }));
+        document
+          .getElementById(`question-${error.fields[0]}`)
+          ?.querySelector("input,textarea,select")
+          ?.focus();
+      }
+      setSummary(
+        error.message || "Не вдалося відправити відповідь. Спробуйте ще раз.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -73,11 +96,12 @@ export default function FormRenderer({ currentForm, onSubmit, guidedMode }) {
         <form onSubmit={handleSubmit} className={styles["form-content"]}>
           {currentForm.questions.map((question, index) => {
             const error =
-              touched[question.id] &&
+              serverErrors[question.id] ||
+              (touched[question.id] &&
               question.required &&
               missingAnswer(question)
                 ? "Це поле є обов’язковим"
-                : null;
+                : null);
             return (
               <fieldset
                 id={`question-${question.id}`}

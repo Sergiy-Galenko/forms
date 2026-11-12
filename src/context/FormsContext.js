@@ -1,186 +1,182 @@
-import { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { FORM_STATUS } from '../types';
-import { storageService } from '../services/StorageService';
-
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
+import { useLocation } from "react-router-dom";
+import { storageService } from "../services/StorageService";
+import { testsApi, publicTestUrl } from "../services/TestsApi";
 const FormsContext = createContext();
-
-const DEFAULT_SHARE_SETTINGS = {
+export const DEFAULT_SHARE_SETTINGS = {
   isPublic: true,
   passwordEnabled: false,
-  password: '',
+  password: "",
   limitResponsesEnabled: false,
   maxResponses: null,
-  expiresAt: '', // ISO date string
-  showResults: false,
-  oneResponsePerDevice: false
+  expiresAt: "",
+  showResults: true,
+  oneResponsePerDevice: false,
 };
-
 export const useForms = () => {
-  const context = useContext(FormsContext);
-  if (!context) {
-    throw new Error('useForms must be used within FormsProvider');
-  }
-  return context;
+  const value = useContext(FormsContext);
+  if (!value) throw new Error("useForms must be used within FormsProvider");
+  return value;
 };
-
-export const FormsProvider = ({ children }) => {
+const newId = () =>
+  window.crypto?.randomUUID?.() ||
+  `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+export function FormsProvider({ children }) {
   const [forms, setForms] = useState(() => storageService.getForms());
-  const [currentForm, setCurrentForm] = useState(null);
-  const [view, setView] = useState('dashboard'); // dashboard, create, edit, view, stats
+  const latest = useRef(forms);
+  const [currentId, setCurrentId] = useState(null);
+  const [view, setView] = useState("dashboard");
   const location = useLocation();
-
-  // Initialize from URL
+  const commit = useCallback((next) => {
+    storageService.saveForms(next);
+    latest.current = next;
+    setForms(next);
+  }, []);
+  const setCurrentForm = useCallback(
+    (form) => setCurrentId(form?.id || null),
+    [],
+  );
   useEffect(() => {
-    const path = location.pathname;
-    const match = path.match(/^\/form\/([^/]+)$/);
-
-    if (match) {
-      const formId = match[1];
-      const form = forms.find((f) => f.id === formId);
-      if (form) {
-        setCurrentForm(form);
-        setView('view');
-      }
-    } else if (path === '/forms' || path === '/') {
-      // Optional: Reset view if navigating back to dashboard
-      // But be careful not to override 'create' or 'edit' if they are set via state, 
-      // although usually they are set via buttons.
-      // For now, let's just handle the form view case to fix the bug.
+    const match = location.pathname.match(/^\/form\/([^/]+)$/);
+    if (match && !match[1].startsWith("pub_")) {
+      const found = latest.current.find((f) => f.id === match[1]);
+      setCurrentId(found?.id || null);
+      setView("view");
+    } else if (location.pathname === "/forms") {
+      setView("dashboard");
     }
-  }, [forms, location]);
-
-  const createForm = useCallback((formData) => {
-    const shareSettings = {
-      ...DEFAULT_SHARE_SETTINGS,
-      ...(formData.shareSettings || {})
-    };
-
-    const newForm = {
-      id: Date.now().toString(),
-      ...formData,
-      shareSettings,
-      status: FORM_STATUS.DRAFT,
-      createdAt: new Date().toISOString(),
-      responses: [],
-      stats: {
-        totalViews: 0,
-        totalResponses: 0,
-        completionRate: 0,
-        averageTime: 0
-      }
-    };
-
-    // Use functional update to ensure we have latest state
-    setForms(prevForms => {
-      const updated = [...prevForms, newForm];
-      storageService.saveForms(updated);
-      return updated;
-    });
-
-    return newForm;
-  }, []);
-
-  const updateForm = useCallback((id, updates) => {
-    setForms(prevForms => {
-      const updated = prevForms.map(form =>
-        form.id === id ? { ...form, ...updates } : form
-      );
-      storageService.saveForms(updated);
-
-      // Update current form if it's the one being modified
-      if (currentForm?.id === id) {
-        setCurrentForm(updated.find(f => f.id === id));
-      }
-
-      return updated;
-    });
-  }, [currentForm]);
-
-  const deleteForm = useCallback((id) => {
-    setForms(prevForms => {
-      const updated = prevForms.filter(form => form.id !== id);
-      storageService.saveForms(updated);
-      return updated;
-    });
-
-    if (currentForm?.id === id) {
-      setCurrentForm(null);
-      setView('dashboard');
-    }
-  }, [currentForm]);
-
-  const addResponse = useCallback(async (formId, response) => {
-    // Fetch IP if needed (best effort)
-    let clientIp = null;
-    try {
-      const ipRes = await fetch('https://api.ipify.org?format=json');
-      if (ipRes.ok) {
-        const data = await ipRes.json();
-        clientIp = data.ip;
-      }
-    } catch (e) {
-      console.warn('Failed to fetch client IP:', e);
-    }
-
-    setForms(prevForms => {
-      const form = prevForms.find(f => f.id === formId);
-      if (!form) return prevForms;
-
-      const newResponse = {
-        id: Date.now().toString(),
-        ...response,
-        submittedAt: new Date().toISOString(),
-        ip: clientIp
+  }, [location.pathname]);
+  const createForm = useCallback(
+    (data) => {
+      const form = {
+        ...data,
+        id: newId(),
+        shareSettings: { ...DEFAULT_SHARE_SETTINGS, ...data.shareSettings },
+        status: data.status || "draft",
+        createdAt: new Date().toISOString(),
+        responses: [],
+        stats: {
+          totalViews: 0,
+          totalResponses: 0,
+          completionRate: 0,
+          averageTime: 0,
+        },
       };
-
-      const responses = [...form.responses, newResponse];
-      const stats = calculateStats(form, responses);
-
-      const updatedForm = { ...form, responses, stats };
-
-      const updatedForms = prevForms.map(f =>
-        f.id === formId ? updatedForm : f
-      );
-
-      storageService.saveForms(updatedForms);
-      return updatedForms;
-    });
-  }, []);
-
-  const calculateStats = (form, responses) => {
-    const totalResponses = responses.length;
-    const totalViews = form.stats?.totalViews || 0;
-    const completionRate = totalViews > 0
-      ? Math.round((totalResponses / totalViews) * 100)
-      : 0;
-
-    // Calculate average time (mock for now)
-    const averageTime = totalResponses > 0 ? Math.floor(Math.random() * 300 + 120) : 0;
-
-    return {
-      totalViews: totalViews + 1,
-      totalResponses,
-      completionRate,
-      averageTime
-    };
-  };
-
-  const value = {
-    forms,
-    currentForm,
-    view,
-    setView,
-    setCurrentForm,
-    createForm,
-    updateForm,
-    deleteForm,
-    addResponse,
-    updateFormStats: (formId, stats) => {
-      updateForm(formId, { stats });
-    }
-  };
-
-  return <FormsContext.Provider value={value}>{children}</FormsContext.Provider>;
-};
-
+      commit([...latest.current, form]);
+      return form;
+    },
+    [commit],
+  );
+  const updateForm = useCallback(
+    (id, updates) => {
+      const current = latest.current.find((f) => f.id === id);
+      if (!current) return null;
+      const next = { ...current, ...updates };
+      commit(latest.current.map((f) => (f.id === id ? next : f)));
+      return next;
+    },
+    [commit],
+  );
+  const deleteForm = useCallback(
+    async (id) => {
+      const form = latest.current.find((f) => f.id === id);
+      if (form?.publication) await testsApi.close(form.publication);
+      commit(latest.current.filter((f) => f.id !== id));
+      setCurrentId((current) => (current === id ? null : current));
+      setView("dashboard");
+    },
+    [commit],
+  );
+  const publishForm = useCallback(
+    async (id, shareSettings) => {
+      const current = latest.current.find((f) => f.id === id);
+      if (!current) throw new Error("Спочатку збережіть тест.");
+      const form = {
+        ...current,
+        status: "active",
+        shareSettings: {
+          ...DEFAULT_SHARE_SETTINGS,
+          ...current.shareSettings,
+          ...shareSettings,
+        },
+      };
+      let publication = current.publication;
+      if (publication) await testsApi.update(publication, form);
+      else publication = await testsApi.publish(form);
+      updateForm(id, {
+        publication,
+        status: "active",
+        shareSettings: form.shareSettings,
+      });
+      return publicTestUrl(publication);
+    },
+    [updateForm],
+  );
+  const refreshResponses = useCallback(
+    async (id) => {
+      const form = latest.current.find((f) => f.id === id);
+      if (!form?.publication) return;
+      const data = await testsApi.owner(form.publication);
+      updateForm(id, data);
+    },
+    [updateForm],
+  );
+  const addResponse = useCallback(
+    async (id, response) => {
+      const form = latest.current.find((f) => f.id === id);
+      if (!form) throw new Error("Форму не знайдено.");
+      const responses = [
+        ...form.responses,
+        {
+          id: newId(),
+          ...response,
+          submittedAt: new Date().toISOString(),
+          ip: null,
+        },
+      ];
+      const totalViews = form.stats?.totalViews || 0;
+      updateForm(id, {
+        responses,
+        stats: {
+          ...form.stats,
+          totalResponses: responses.length,
+          completionRate: totalViews
+            ? Math.round((responses.length / totalViews) * 100)
+            : 0,
+        },
+      });
+    },
+    [updateForm],
+  );
+  const updateFormStats = useCallback(
+    (id, stats) => updateForm(id, { stats }),
+    [updateForm],
+  );
+  return (
+    <FormsContext.Provider
+      value={{
+        forms,
+        currentForm: forms.find((f) => f.id === currentId) || null,
+        view,
+        setView,
+        setCurrentForm,
+        createForm,
+        updateForm,
+        deleteForm,
+        addResponse,
+        updateFormStats,
+        publishForm,
+        refreshResponses,
+      }}
+    >
+      {children}
+    </FormsContext.Provider>
+  );
+}

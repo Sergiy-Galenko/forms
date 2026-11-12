@@ -1,3 +1,4 @@
+import AnswerKey from "./AnswerKey";
 import ScaleEditor from "./ScaleEditor";
 import screenStyles from "../../styles/screens.module.css";
 import { QUESTION_TYPES } from "../../types";
@@ -19,6 +20,7 @@ const QuestionEditor = ({
   const handleTypeChange = (type) => {
     const updates = {
       type,
+      correctAnswers: [],
     };
     if (
       type === QUESTION_TYPES.SINGLE_CHOICE ||
@@ -53,7 +55,13 @@ const QuestionEditor = ({
     });
   };
   const updateOption = (optionId, text) => {
+    const oldText = question.options.find(
+      (option) => option.id === optionId,
+    )?.text;
     onUpdate(question.id, {
+      correctAnswers: (question.correctAnswers || []).map((answer) =>
+        answer === oldText ? text : answer,
+      ),
       options: question.options.map((opt) =>
         opt.id === optionId
           ? {
@@ -65,7 +73,13 @@ const QuestionEditor = ({
     });
   };
   const deleteOption = (optionId) => {
+    const oldText = question.options.find(
+      (option) => option.id === optionId,
+    )?.text;
     onUpdate(question.id, {
+      correctAnswers: (question.correctAnswers || []).filter(
+        (answer) => answer !== oldText,
+      ),
       options: question.options.filter((opt) => opt.id !== optionId),
     });
   };
@@ -161,6 +175,11 @@ const QuestionEditor = ({
         <ScaleEditor question={question} onUpdate={onUpdate} />
       )}
 
+      <AnswerKey
+        key={`${question.id}-${question.type}`}
+        question={question}
+        onUpdate={onUpdate}
+      />
       <label className={cx("required-checkbox")}>
         <input
           type="checkbox"

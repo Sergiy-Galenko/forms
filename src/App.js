@@ -15,6 +15,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { ToastProvider } from "./components/ui/Toast";
 const Dashboard = lazy(() => import("./components/Dashboard/Dashboard"));
 const FormBuilder = lazy(() => import("./components/FormBuilder/FormBuilder"));
+const PublicTestPage = lazy(() => import("./pages/PublicTestPage"));
 const FormView = lazy(() => import("./components/FormView/FormView"));
 const Stats = lazy(() => import("./components/Stats/Stats"));
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -63,7 +64,7 @@ function App() {
                       <Route path="/about" element={<AboutPage />} />
                       <Route path="/help" element={<HelpPage />} />
                       <Route path="/forms" element={<FormsArea />} />
-                      <Route path="/form/:id" element={<FormsArea />} />
+                      <Route path="/form/:id" element={<PublicTestPage />} />
                       <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                   </Suspense>

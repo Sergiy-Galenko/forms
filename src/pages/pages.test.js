@@ -114,3 +114,27 @@ test.each([
   fireEvent.click(screen.getByRole("button", { name: "Відправити" }));
   await waitFor(() => expect(submit).toHaveBeenCalledWith({ q: value }));
 });
+
+test("required scale accepts zero as an answer", async () => {
+  const submit = jest.fn().mockResolvedValue();
+  render(
+    <FormRenderer
+      currentForm={{
+        title: "Шкала",
+        questions: [
+          {
+            id: "zero",
+            title: "Оцінка",
+            type: "scale",
+            required: true,
+            scale: { min: -1, max: 5 },
+          },
+        ],
+      }}
+      onSubmit={submit}
+    />,
+  );
+  fireEvent.change(screen.getByLabelText("Оцінка"), { target: { value: "0" } });
+  fireEvent.click(screen.getByRole("button", { name: "Відправити" }));
+  await waitFor(() => expect(submit).toHaveBeenCalledWith({ zero: 0 }));
+});

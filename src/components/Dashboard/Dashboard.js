@@ -1,3 +1,4 @@
+import ExcelImport from "../ExcelImport/ExcelImport";
 import screenStyles from "../../styles/screens.module.css";
 import React, { useState, useMemo } from "react";
 import { FiPlus } from "@react-icons/all-files/fi/FiPlus";
@@ -16,12 +17,14 @@ const cx = (value) =>
     .map((name) => screenStyles[name] || name)
     .join(" ");
 const Dashboard = () => {
-  const { forms, setView } = useForms();
+  const { forms, setView, setCurrentForm } = useForms();
+  const [importOpen, setImportOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortBy, setSortBy] = useState("date");
   const debouncedSearch = useDebounce(searchTerm, 300);
   const handleCreateForm = () => {
+    setCurrentForm(null);
     setView("create");
   };
   const filteredForms = useMemo(() => {
@@ -60,6 +63,7 @@ const Dashboard = () => {
   }, [forms]);
   return (
     <div className={cx("dashboard")}>
+      {importOpen && <ExcelImport onClose={() => setImportOpen(false)} />}
       {}
       <div className={cx("dashboard-header")}>
         <div>
@@ -68,9 +72,14 @@ const Dashboard = () => {
             Створюйте, керуйте та аналізуйте свої форми
           </p>
         </div>
-        <Button icon={FiPlus} size="lg" onClick={handleCreateForm}>
-          Створити форму
-        </Button>
+        <div className={cx("builder-actions")}>
+          <Button variant="secondary" onClick={() => setImportOpen(true)}>
+            Імпортувати Excel
+          </Button>
+          <Button icon={FiPlus} size="lg" onClick={handleCreateForm}>
+            Створити форму
+          </Button>
+        </div>
       </div>
 
       {}

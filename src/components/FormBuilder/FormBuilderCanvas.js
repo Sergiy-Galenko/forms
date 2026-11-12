@@ -135,7 +135,7 @@ const FormBuilderCanvas = ({
     <Button
       variant="ghost"
       className={cx("btn-add-question")}
-      onClick={addQuestion}
+      onClick={() => addQuestion(QUESTION_TYPES.TEXT)}
       fullWidth
     >
       + Додати питання

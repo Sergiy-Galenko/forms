@@ -12,7 +12,7 @@ export default function QuestionAnswer({
     label: "Ваша відповідь",
     "aria-label": question.title,
     "aria-required": question.required,
-    value: answer || "",
+    value: answer ?? "",
     onChange: (e) => onAnswer(question.id, e.target.value),
     onBlur: () => onBlur(question.id),
     error,
@@ -81,15 +81,15 @@ export default function QuestionAnswer({
           aria-describedby={error ? `error-${question.id}` : undefined}
           aria-invalid={error ? true : undefined}
           type="range"
-          min={question.scale?.min || 1}
-          max={question.scale?.max || 5}
-          value={answer || question.scale?.min || 1}
+          min={question.scale?.min ?? 1}
+          max={question.scale?.max ?? 5}
+          value={answer ?? question.scale?.min ?? 1}
           onChange={(e) => onAnswer(question.id, parseInt(e.target.value))}
           onBlur={() => onBlur(question.id)}
           className={styles["scale-slider"]}
         />
         <div className={styles["scale-value"]}>
-          {answer || question.scale?.min || 1}
+          {answer ?? question.scale?.min ?? 1}
         </div>
         {error && (
           <p id={`error-${question.id}`} className={styles["error-message"]}>

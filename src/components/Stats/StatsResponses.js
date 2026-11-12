@@ -20,6 +20,11 @@ const StatsResponses = ({ responses, currentForm }) => {
               <div className={cx("response-date")}>
                 {new Date(response.submittedAt).toLocaleString("uk-UA")}
               </div>
+              {response.maxScore > 0 && (
+                <p>
+                  Балів: {response.score} / {response.maxScore}
+                </p>
+              )}
               <div className={cx("response-answers")}>
                 {Object.entries(response.answers).map(
                   ([questionId, answer]) => {

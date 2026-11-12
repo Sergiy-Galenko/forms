@@ -1,3 +1,6 @@
+import { useState } from "react";
+import ShareModal from "../ShareModal/ShareModal";
+import { publicTestUrl } from "../../services/TestsApi";
 import screenStyles from "../../styles/screens.module.css";
 import React from "react";
 import { FiEdit } from "@react-icons/all-files/fi/FiEdit";
@@ -18,6 +21,7 @@ const cx = (value) =>
 const FormCard = ({ form }) => {
   const { setView, setCurrentForm, deleteForm } = useForms();
   const toast = useToast();
+  const [sharing, setSharing] = useState(false);
   const handleEdit = () => {
     setCurrentForm(form);
     setView("edit");
@@ -26,16 +30,27 @@ const FormCard = ({ form }) => {
     setCurrentForm(form);
     setView("stats");
   };
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (window.confirm(`Видалити форму "${form.title}"?`)) {
-      deleteForm(form.id);
-      toast.success("Форму видалено");
+      try {
+        await deleteForm(form.id);
+        toast.success("Форму видалено");
+      } catch (error) {
+        toast.error(error.message);
+      }
     }
   };
-  const handleCopyLink = () => {
-    const url = `${window.location.origin}/form/${form.id}`;
-    navigator.clipboard.writeText(url);
-    toast.success("Посилання скопійовано!");
+  const handleCopyLink = async () => {
+    if (!form.publication) {
+      setSharing(true);
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(publicTestUrl(form.publication));
+      toast.success("Посилання скопійовано!");
+    } catch {
+      setSharing(true);
+    }
   };
   const statusLabels = {
     [FORM_STATUS.ACTIVE]: "Активна",
@@ -46,6 +61,7 @@ const FormCard = ({ form }) => {
   const questionCount = form.questions?.length || 0;
   return (
     <Card hoverable className={cx("form-card")}>
+      {sharing && <ShareModal form={form} onClose={() => setSharing(false)} />}
       <div className={cx("form-card-header")}>
         <div className={cx("form-card-icon")}>
           <FiFileText />
@@ -93,6 +109,9 @@ const FormCard = ({ form }) => {
           onClick={handleStats}
         >
           Статистика
+        </Button>
+        <Button variant="secondary" size="sm" onClick={() => setSharing(true)}>
+          Поділитися
         </Button>
         <div className={cx("form-card-menu")}>
           <Button

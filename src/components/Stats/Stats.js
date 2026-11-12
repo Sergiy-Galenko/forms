@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import screenStyles from "../../styles/screens.module.css";
 import { useForms } from "../../context/FormsContext";
 import StatsSummary from "./StatsSummary";
@@ -11,7 +12,26 @@ const cx = (value) =>
     .map((name) => screenStyles[name] || name)
     .join(" ");
 const Stats = () => {
-  const { currentForm, setView } = useForms();
+  const { currentForm, setView, refreshResponses } = useForms();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const formId = currentForm?.id;
+  const published = !!currentForm?.publication;
+  useEffect(() => {
+    if (!published) return;
+    let active = true;
+    setLoading(true);
+    refreshResponses(formId)
+      .catch((e) => {
+        if (active) setError(e.message);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [formId, published, refreshResponses]);
   if (!currentForm) {
     return <div>Опитування не знайдено</div>;
   }
@@ -19,7 +39,41 @@ const Stats = () => {
   const responses = currentForm.responses || [];
   return (
     <div className={cx("stats-page")}>
+      {loading && <p role="status">Оновлюємо відповіді…</p>}
+      {error && (
+        <p role="alert">
+          {error}{" "}
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setError("");
+              refreshResponses(formId).catch((e) => setError(e.message));
+            }}
+          >
+            Спробувати ще раз
+          </Button>
+        </p>
+      )}
       <div className={cx("stats-header")}>
+        {published && (
+          <Button
+            variant="secondary"
+            isLoading={loading}
+            onClick={async () => {
+              setLoading(true);
+              setError("");
+              try {
+                await refreshResponses(formId);
+              } catch (e) {
+                setError(e.message);
+              } finally {
+                setLoading(false);
+              }
+            }}
+          >
+            Оновити відповіді
+          </Button>
+        )}
         <Button variant="secondary" onClick={() => setView("dashboard")}>
           ← Назад
         </Button>

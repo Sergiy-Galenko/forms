@@ -1,8 +1,9 @@
+import ShareModal from "../ShareModal/ShareModal";
 import screenStyles from "../../styles/screens.module.css";
 import { useState, useEffect } from "react";
 import { useForms } from "../../context/FormsContext";
 import { useExperience } from "../../context/ExperienceContext";
-import { QUESTION_TYPES, FORM_STATUS } from "../../types";
+import { QUESTION_TYPES } from "../../types";
 import FormBuilderHeader from "./FormBuilderHeader";
 import FormBuilderCanvas from "./FormBuilderCanvas";
 const cx = (value) =>
@@ -11,7 +12,9 @@ const cx = (value) =>
     .map((name) => screenStyles[name] || name)
     .join(" ");
 const FormBuilder = () => {
-  const { currentForm, createForm, updateForm, setView } = useForms();
+  const { currentForm, createForm, updateForm, setView, setCurrentForm } =
+    useForms();
+  const [sharing, setSharing] = useState(false);
   const { experience } = useExperience();
   const [formData, setFormData] = useState({
     title: "",
@@ -38,21 +41,13 @@ const FormBuilder = () => {
     } else {
       const newForm = createForm(formData);
       setFormData(newForm);
+      setCurrentForm(newForm);
       setSavedData(JSON.stringify(newForm));
     }
   };
   const handlePublish = () => {
-    const updated = {
-      ...formData,
-      status: FORM_STATUS.ACTIVE,
-    };
-    if (currentForm) {
-      updateForm(currentForm.id, updated);
-    } else {
-      const newForm = createForm(updated);
-      setFormData(newForm);
-    }
-    setView("dashboard");
+    handleSave();
+    setSharing(true);
   };
   const addQuestion = (type = QUESTION_TYPES.TEXT) => {
     const base = {
@@ -148,6 +143,9 @@ const FormBuilder = () => {
   );
   return (
     <div className={cx("form-builder")}>
+      {sharing && currentForm && (
+        <ShareModal form={currentForm} onClose={() => setSharing(false)} />
+      )}
       <FormBuilderHeader
         saved={saved}
         onBack={() => setView("dashboard")}

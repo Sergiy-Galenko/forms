@@ -1,0 +1,39 @@
+.key {
+  margin: 0;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: grid;
+  gap: 16px;
+}
+.key legend {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+.key p {
+  font-size: 12px;
+  margin: 0;
+}
+.option {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-height: 44px;
+  font-size: 14px;
+}
+.option input {
+  width: 18px;
+  height: 18px;
+}
+.clear {
+  justify-self: start;
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  min-height: 44px;
+  padding: 8px 0;
+  font-size: 14px;
+  text-align: left;
+}
