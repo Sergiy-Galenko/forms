@@ -1,0 +1,523 @@
+{
+  "date": "2026-11-12",
+  "baselineCommit": "49e1dfb",
+  "codeCommit": "6c63cd4",
+  "measurement": "Local production builds served with gzip and immutable hashed-asset caching; Lighthouse default mobile simulation. Browser database updated for both benchmark builds.",
+  "before": {
+    "lighthouseVersion": "13.6.0",
+    "fetchTime": "2026-11-12T13:45:33.660Z",
+    "scores": {
+      "performance": 99,
+      "accessibility": 95,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "lcpMs": 1674.4702499999999,
+    "cls": 0,
+    "tbtMs": 26
+  },
+  "after": {
+    "lighthouseVersion": "13.6.0",
+    "fetchTime": "2026-11-12T13:47:49.859Z",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "lcpMs": 1933.11505,
+    "cls": 0,
+    "tbtMs": 0
+  },
+  "bundleGzipBytes": {
+    "baselineOriginalBuild": {
+      "js": 83690,
+      "css": 8780
+    },
+    "baselineWithUpdatedBrowserData": {
+      "js": 83052,
+      "css": 8768
+    },
+    "after": {
+      "initialHomeJS": 80159,
+      "initialHomeCSS": 7068,
+      "allJS": 98754,
+      "allCSS": 9400
+    }
+  },
+  "browser": {
+    "checks": [
+      {
+        "theme": "light",
+        "width": 320,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 320,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 320,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 320,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 375,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 375,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 375,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 375,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 414,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 414,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 414,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 414,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 768,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 768,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 768,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 768,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 1024,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 1024,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 1024,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 1024,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 1280,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 1280,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 1280,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 1280,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 1536,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 1536,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 1536,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "light",
+        "width": 1536,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 320,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 320,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 320,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 320,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 375,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 375,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 375,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 375,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 414,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 414,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 414,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 414,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 768,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 768,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 768,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 768,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 1024,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 1280,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 1280,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 1280,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 1280,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 1536,
+        "route": "/",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 1536,
+        "route": "/about",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 1536,
+        "route": "/help",
+        "overflow": false
+      },
+      {
+        "theme": "dark",
+        "width": 1536,
+        "route": "/forms",
+        "overflow": false
+      },
+      {
+        "route": "editor",
+        "width": 320,
+        "overflow": false
+      }
+    ],
+    "errors": []
+  },
+  "axe": [
+    {
+      "route": "/",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/about",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/help",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/forms",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "editor",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "mobile-menu",
+      "theme": "light",
+      "violations": []
+    },
+    {
+      "route": "/",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/about",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/help",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "/forms",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "editor",
+      "theme": "dark",
+      "violations": []
+    },
+    {
+      "route": "mobile-menu",
+      "theme": "dark",
+      "violations": []
+    }
+  ],
+  "additionalBrowserChecks": [
+    {
+      "page": "stats",
+      "theme": "light",
+      "width": 320,
+      "overflow": false,
+      "axe": []
+    },
+    {
+      "page": "public-closed",
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "page": "stats",
+      "theme": "light",
+      "width": 1280,
+      "overflow": false,
+      "axe": []
+    },
+    {
+      "page": "public-closed",
+      "theme": "light",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "page": "stats",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false,
+      "axe": []
+    },
+    {
+      "page": "public-closed",
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "page": "stats",
+      "theme": "dark",
+      "width": 1280,
+      "overflow": false,
+      "axe": []
+    },
+    {
+      "page": "public-closed",
+      "theme": "dark",
+      "width": 1280,
+      "overflow": false
+    },
+    {
+      "page": "home-200-percent-css-zoom",
+      "overflow": false
+    },
+    {
+      "page": "mobile-tabs",
+      "retainsInput": true
+    },
+    {
+      "page": "theme-persistence",
+      "theme": "light",
+      "saved": "light"
+    }
+  ]
+}

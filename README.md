@@ -1,70 +1,86 @@
-# Getting Started with Create React App
+# FormsCraft
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Україномовний конструктор опитувань із локальним збереженням. React 19, Create React App 5, React Router 6, CSS Modules та точкові Feather-іконки з `@react-icons/all-files`. Без нових runtime-залежностей.
 
-## Available Scripts
+## Запуск
 
-In the project directory, you can run:
+```sh
+npm install
+npm start
+npm run build
+CI=true npm test -- --watchAll=false
+npx eslint src --ext .js --max-warnings=0
+```
 
-### `npm start`
+Production-файли створюються в `build/`. Хостинг має повертати `index.html` для SPA-маршрутів, стискати статичні ресурси та кешувати файли з хешами.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Маршрути та можливості
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- `/` — головна.
+- `/about` — опис проєкту.
+- `/help` — довідка.
+- `/forms` — список, пошук, фільтрація за статусом і сортування; редактор та статистика перемикаються станом контексту.
+- `/form/:id` — локально збережена форма для заповнення.
+- Невідомі URL, як і раніше, перенаправляються на `/`.
 
-### `npm test`
+Типи питань: короткий і довгий текст, вибір одного/кількох варіантів, шкала, email, число та дата. Редактор підтримує додавання, зміну типу, переміщення та видалення питань. Список дозволяє редагувати, переглядати статистику, копіювати посилання та видаляти форму.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Дані зберігаються лише в цьому браузері.** Посилання не переносить форму на інший пристрій: серверного сховища немає. Не очищуйте дані сайту, якщо потрібно зберегти форми. Під час відправлення відповідей або перевірки обмежень застосунок може звертатися до `api.ipify.org` для визначення IP — це наявна поведінка.
 
-### `npm run build`
+## Структура
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```text
+src/
+  components/
+    ui/                 # Компонент/Компонент.js + Компонент.module.css
+    Dashboard/          # Пошук, фільтри, картки
+    FormBuilder/        # Редактор, панель питань, мобільні вкладки
+    FormView/           # Доступ, типи відповідей, відправлення, успіх
+    Stats/              # Зведення, графіки, відповіді
+    ShareModal/         # Наявний окремий UI поширення (не підключений у списку)
+    Layout/             # Шапка, навігація, футер
+  context/              # Форми, тема, підказки
+  hooks/                # Debounce, media query та наявні допоміжні хуки
+  layouts/AppLayout/    # Skip link, main, загальна геометрія
+  pages/                # Інформаційні сторінки
+  services/             # Адаптер localStorage
+  styles/               # tokens.css, base.css, screens.module.css
+  types/                # Константи типів питань і статусів
+  utils/                # Наявні статистичні та експортні утиліти
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Однорядкові файли `components/ui/Button.js`, `Input.js` тощо — сумісні експорти для доменних компонентів. Візуальні компоненти лежать у власних папках. Спільні стилі доменних екранів ізольовано через `screens.module.css`; глобальними залишаються лише reset, типографіка, фокус і токени.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Дизайн і доступність
 
-### `npm run eject`
+Єдине джерело кольорів і розмірів — `src/styles/tokens.css`: нейтральна шкала, один синій акцент, семантичні кольори, крок відступів 4 px, радіуси 6/10/14 px, три рівні тіней. Шрифт системний — зовнішніх запитів до Google Fonts немає.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Тема за замовчуванням системна та реагує на її зміну. Явний вибір записується у новий ключ `formscraft:appearance:v1`; старий `theme` читається для сумісності та не перезаписується. Скрипт у `public/index.html` застосовує тему до React. Усі звернення теми до сховища захищено `try/catch`.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Компоненти підтримують видимий клавіатурний фокус, пов’язані labels/hints/errors, `aria-live`, обмеження руху, модальний focus trap та повернення фокусу. У мобільному редакторі є вкладки з керуванням стрілками. Відправлення з пропущеними обов’язковими полями фокусує першу помилку, зберігаючи наявні правила перевірки та формат відповідей.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Щоб додати UI-компонент:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Створіть `components/ui/Name/Name.js` та `Name.module.css`.
+2. Використовуйте токени, нативну семантику, видимий label і зрозумілу назву дії.
+3. Передавайте ref до поля, якщо потрібен зовнішній фокус.
+4. Додайте змістовний тест поведінки й перевірте клавіатуру, обидві теми та 320 px.
 
-## Learn More
+## Перевірки та обмеження
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Підсумкові виміри, checklist та відомі обмеження — у [docs/verification.md](docs/verification.md). INP потребує польових даних; лабораторний TBT його не замінює. Lighthouse вимірюється на локальній production-збірці, а не на поточному публічному деплої.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Наявну бізнес-логіку залишено без змін, включно з відомими проблемами перевірки доступу/лічильника переглядів, публікації, повторного збереження нової форми та часткового запису налаштувань поширення. Їх потрібно виправляти окремим завданням; деталі у звіті. Наявні ключі `forms`, `user_settings`, `responded_<id>` і формат даних збережено.
 
-### Code Splitting
+У початковому коді були непідключені альтернативні Dashboard-компоненти, шаблони, шапка та панель підказок. Їх видалено як мертвий UI. Утиліти експорту та окремі компоненти поширення залишено, але нові точки входу до них не додавалися.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Скриншоти
 
-### Analyzing the Bundle Size
+- [Головна](docs/screenshots/home.png)
+- [Список — світла тема](docs/screenshots/dashboard-light.png)
+- [Список — темна тема](docs/screenshots/dashboard-dark.png)
+- [Редактор](docs/screenshots/editor.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Скриншоти слугують зразками оформлення; для змін дизайну оновлюйте їх разом із перевіркою mobile/desktop.
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Додатково: [статистика — light](docs/screenshots/stats-light.png), [статистика — dark](docs/screenshots/stats-dark.png).
