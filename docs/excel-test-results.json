@@ -1,0 +1,22 @@
+{
+  "link": "http://127.0.0.1:4177/form/pub_f3e76b71-e6f4-43a0-b8f0-5a13e6747124",
+  "score": "Ваш результат: 4 / 4 балів",
+  "limitEnforced": true,
+  "overflow": false,
+  "pageErrors": [],
+  "authorReceivesAnswer": true,
+  "axeResults": [
+    {
+      "stage": "import-preview",
+      "violations": []
+    },
+    {
+      "stage": "share-settings",
+      "violations": []
+    },
+    {
+      "stage": "public-test-dark-320",
+      "violations": []
+    }
+  ]
+}
